@@ -145,15 +145,33 @@ input:focus-visible {
 .hiscore b { color: var(--amber-d); }
 
 /* ── MAIN ── */
-main { max-width: 760px; margin: 0 auto; padding: 18px 16px 64px; }
+main { max-width: 1120px; margin: 0 auto; padding: 18px 16px 64px; }
 
 /* ── SCREENS ── */
 .screen { display: none; }
 .screen.active { display: block; }
 
+#screen-game.active {
+  display: grid;
+  grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+.mission-hero { grid-column: 1 / -1; }
+.setup-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: sticky;
+  top: 86px;
+}
+.play-panel {
+  min-width: 0;
+}
+
 .mission-hero {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   gap: 18px;
   align-items: center;
   background:
@@ -179,7 +197,7 @@ main { max-width: 760px; margin: 0 auto; padding: 18px 16px 64px; }
   margin-bottom: 10px;
 }
 .mission-hero h1 {
-  font-size: clamp(28px, 6vw, 46px);
+  font-size: clamp(28px, 4vw, 42px);
   line-height: 0.95;
   letter-spacing: 0;
   margin-bottom: 8px;
@@ -213,7 +231,7 @@ main { max-width: 760px; margin: 0 auto; padding: 18px 16px 64px; }
   border: 2px solid var(--border);
   border-radius: 20px;
   padding: 14px;
-  margin-bottom: 14px;
+  margin-bottom: 0;
   box-shadow: var(--shadow-soft);
 }
 .section-label {
@@ -240,17 +258,13 @@ main { max-width: 760px; margin: 0 auto; padding: 18px 16px 64px; }
 
 /* ── MODE BANNER ── */
 .mode-banner {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 10px;
-  overflow-x: auto;
-  padding-bottom: 3px;
-  scrollbar-width: none;
 }
-.mode-banner::-webkit-scrollbar { display: none; }
 
 .mode-pill {
-  flex-shrink: 0;
-  min-width: 128px;
+  min-width: 0;
   padding: 11px 16px;
   border-radius: 16px;
   border: 2.5px solid transparent;
@@ -279,7 +293,7 @@ main { max-width: 760px; margin: 0 auto; padding: 18px 16px 64px; }
 /* age selector */
 .age-selector {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 12px;
 }
 .age-card {
@@ -292,7 +306,7 @@ main { max-width: 760px; margin: 0 auto; padding: 18px 16px 64px; }
   transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
   font-family: var(--font);
   color: var(--text);
-  min-height: 112px;
+  min-height: 104px;
 }
 .age-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
 .age-card.active { border-color: var(--purple); box-shadow: 0 8px 24px rgba(139,92,246,0.18); }
@@ -315,7 +329,7 @@ main { max-width: 760px; margin: 0 auto; padding: 18px 16px 64px; }
 /* op selector */
 .op-selector {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(108px, 1fr));
+  grid-template-columns: 1fr 1fr;
   gap: 9px;
 }
 .op-btn {
@@ -358,7 +372,8 @@ main { max-width: 760px; margin: 0 auto; padding: 18px 16px 64px; }
 
 /* options row */
 .options-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr;
   gap: 12px;
   flex-wrap: wrap;
   align-items: center;
@@ -386,7 +401,8 @@ main { max-width: 760px; margin: 0 auto; padding: 18px 16px 64px; }
 .opt-chip.active { background: var(--text); color: #fff; border-color: var(--text); }
 
 .timer-toggle {
-  margin-left: auto;
+  margin-left: 0;
+  grid-column: 1 / -1;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -1073,6 +1089,36 @@ main { max-width: 760px; margin: 0 auto; padding: 18px 16px 64px; }
 }
 
 /* ── RESPONSIVE ── */
+@media (max-width: 860px) {
+  main { max-width: 760px; }
+  #screen-game.active {
+    display: block;
+  }
+  .setup-panel {
+    position: static;
+  }
+  .age-selector {
+    grid-template-columns: 1fr 1fr;
+  }
+  .mode-banner {
+    display: flex;
+    overflow-x: auto;
+    padding-bottom: 3px;
+    scrollbar-width: none;
+  }
+  .mode-banner::-webkit-scrollbar { display: none; }
+  .mode-pill {
+    flex-shrink: 0;
+    min-width: 128px;
+  }
+  .op-selector {
+    grid-template-columns: repeat(auto-fit, minmax(108px, 1fr));
+  }
+  .control-section {
+    margin-bottom: 14px;
+  }
+}
+
 @media (max-width: 420px) {
   nav { justify-content: center; }
   .logo { width: 100%; text-align: center; }
@@ -1141,6 +1187,7 @@ main { max-width: 760px; margin: 0 auto; padding: 18px 16px 64px; }
       <div class="mission-orbit" aria-hidden="true"><span>🧮</span></div>
     </section>
 
+    <div class="setup-panel">
     <div class="control-section">
       <div class="section-label"><b>1</b> Choose your age path</div>
       <div class="age-selector">
@@ -1190,7 +1237,9 @@ main { max-width: 760px; margin: 0 auto; padding: 18px 16px 64px; }
         Timer
       </label>
     </div>
+    </div>
 
+    <div class="play-panel">
     <div class="stats-bar">
       <div class="stat-card score-card">
         <div class="s-label">Score</div>
@@ -1256,6 +1305,7 @@ main { max-width: 760px; margin: 0 auto; padding: 18px 16px 64px; }
           <button class="btn-secondary" id="save-score-btn">Save score</button>
         </div>
       </div>
+    </div>
     </div>
 
   </div>
