@@ -146,10 +146,35 @@ main { max-width: 660px; margin: 0 auto; padding: 20px 16px 60px; }
 .mode-pill[data-mode="speedrun"].active { background: var(--rose);   color: #fff; border-color: var(--rose-d); }
 .mode-pill[data-mode="mixed"].active    { background: var(--amber);  color: #fff; border-color: var(--amber-d); }
 
+/* age selector */
+.age-selector {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.age-card {
+  background: var(--card);
+  border: 3px solid var(--border);
+  border-radius: 16px;
+  padding: 13px 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+  font-family: var(--font);
+  color: var(--text);
+}
+.age-card:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+.age-card.active { border-color: var(--purple); box-shadow: 0 4px 18px rgba(139,92,246,0.18); }
+.age-card strong { display: block; font-size: 16px; font-weight: 900; margin-bottom: 3px; }
+.age-card span { display: block; font-size: 11px; font-weight: 800; color: var(--muted); line-height: 1.35; }
+.age-card[data-age="junior"].active strong { color: var(--green-d); }
+.age-card[data-age="senior"].active strong { color: var(--purple-d); }
+
 /* op selector */
 .op-selector {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(92px, 1fr));
   gap: 7px;
   margin-bottom: 12px;
 }
@@ -170,12 +195,24 @@ main { max-width: 660px; margin: 0 auto; padding: 20px 16px 60px; }
 .op-btn[data-op="mul"]   { background: var(--amber-l);  color: var(--amber-d);  border-color: #fcd34d; }
 .op-btn[data-op="div"]   { background: var(--coral-l);  color: var(--coral-d);  border-color: #fdba74; }
 .op-btn[data-op="mixed"] { background: var(--purple-l); color: var(--purple-d); border-color: #c4b5fd; }
+.op-btn[data-op="fractions"] { background: var(--teal-l); color: var(--teal-d); border-color: #67e8f9; }
+.op-btn[data-op="decimal"] { background: var(--green-l); color: var(--green-d); border-color: #6ee7b7; }
+.op-btn[data-op="geometry"] { background: var(--rose-l); color: var(--rose-d); border-color: #fda4af; }
+.op-btn[data-op="bodmas"] { background: var(--blue-l); color: var(--blue-d); border-color: #93c5fd; }
+.op-btn[data-op="number"] { background: var(--amber-l); color: var(--amber-d); border-color: #fcd34d; }
+.op-btn[data-op="data"] { background: var(--purple-l); color: var(--purple-d); border-color: #c4b5fd; }
 .op-btn.active { transform: scale(1.05); }
 .op-btn[data-op="add"].active   { background: var(--green);  color: #fff; border-color: var(--green-d); }
 .op-btn[data-op="sub"].active   { background: var(--blue);   color: #fff; border-color: var(--blue-d); }
 .op-btn[data-op="mul"].active   { background: var(--amber);  color: #fff; border-color: var(--amber-d); }
 .op-btn[data-op="div"].active   { background: var(--coral);  color: #fff; border-color: var(--coral-d); }
 .op-btn[data-op="mixed"].active { background: var(--purple); color: #fff; border-color: var(--purple-d); }
+.op-btn[data-op="fractions"].active { background: var(--teal); color: #fff; border-color: var(--teal-d); }
+.op-btn[data-op="decimal"].active { background: var(--green); color: #fff; border-color: var(--green-d); }
+.op-btn[data-op="geometry"].active { background: var(--rose); color: #fff; border-color: var(--rose-d); }
+.op-btn[data-op="bodmas"].active { background: var(--blue); color: #fff; border-color: var(--blue-d); }
+.op-btn[data-op="number"].active { background: var(--amber); color: #fff; border-color: var(--amber-d); }
+.op-btn[data-op="data"].active { background: var(--purple); color: #fff; border-color: var(--purple-d); }
 
 /* options row */
 .options-row {
@@ -354,6 +391,11 @@ main { max-width: 660px; margin: 0 auto; padding: 20px 16px 60px; }
   margin-bottom: 20px;
   line-height: 1;
   font-family: var(--mono);
+}
+.q-card.senior .q-text {
+  font-size: 28px;
+  letter-spacing: 0;
+  line-height: 1.25;
 }
 
 /* number insight strip */
@@ -540,6 +582,19 @@ main { max-width: 660px; margin: 0 auto; padding: 20px 16px 60px; }
 .r-stat .rl { font-size: 11px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; margin-top: 2px; }
 .results-stars { display: flex; justify-content: center; gap: 10px; margin-bottom: 16px; }
 .star-svg { width: 40px; height: 40px; }
+.reward-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--amber-l);
+  color: var(--amber-d);
+  border: 2px solid #fcd34d;
+  border-radius: 99px;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 900;
+  margin-bottom: 16px;
+}
 
 /* op breakdown */
 .op-breakdown {
@@ -895,6 +950,17 @@ main { max-width: 660px; margin: 0 auto; padding: 20px 16px 60px; }
   <!-- ══ GAME SCREEN ══ -->
   <div class="screen active" id="screen-game">
 
+    <div class="age-selector">
+      <button class="age-card active" data-age="junior">
+        <strong>Ages 6-9</strong>
+        <span>Number facts, operations, tables, quick confidence building</span>
+      </button>
+      <button class="age-card" data-age="senior">
+        <strong>Ages 10-12</strong>
+        <span>Year 4-6 missions: fractions, decimals, geometry, patterns</span>
+      </button>
+    </div>
+
     <!-- Game Mode Pills -->
     <div class="mode-banner">
       <button class="mode-pill active" data-mode="classic">🎯 Classic<br><small style="font-size:10px;font-weight:700;opacity:0.8">4 choices</small></button>
@@ -975,6 +1041,7 @@ main { max-width: 660px; margin: 0 auto; padding: 20px 16px 60px; }
         <div class="results-title" id="r-title">Amazing!</div>
         <div class="results-sub"   id="r-sub">You scored 0 points</div>
         <div class="results-stars" id="r-stars"></div>
+        <div class="reward-line" id="r-reward">⭐ 0 reward stars collected</div>
         <div class="results-grid">
           <div class="r-stat"><div class="rv" id="r-correct">0</div><div class="rl">Correct</div></div>
           <div class="r-stat"><div class="rv" id="r-score2">0</div><div class="rl">Score</div></div>
@@ -1070,6 +1137,20 @@ const ICONS = {
 };
 
 const ALL_OPS = ['add','sub','mul','div'];
+const JUNIOR_OPS = ['add','sub','mul','div'];
+const SENIOR_OPS = ['fractions','decimal','geometry','bodmas','number','data'];
+
+const OP_LABELS = {
+  add:'Addition', sub:'Subtraction', mul:'Multiplication', div:'Division', mixed:'Mixed',
+  fractions:'Fractions', decimal:'Decimals & Percent', geometry:'Measurement & Geometry',
+  bodmas:'Order of Operations', number:'Factors & Patterns', data:'Data & Chance'
+};
+
+const OP_NAMES = {
+  add:'+ Addition', sub:'− Subtraction', mul:'× Multiplication', div:'÷ Division',
+  fractions:'Fractions', decimal:'Decimals & Percent', geometry:'Measurement & Geometry',
+  bodmas:'Order of Operations', number:'Factors & Patterns', data:'Data & Chance'
+};
 
 const CORRECT_MSGS = [
   'Brilliant! 🌟','Awesome! 🎉','You got it! ✨','Superstar! 🚀',
@@ -1085,6 +1166,7 @@ const STREAK_MSGS = {
 };
 
 let state = {
+  ageGroup: 'junior',
   op: 'add',
   level: 0,
   mode: 'classic',
@@ -1102,6 +1184,7 @@ let state = {
   timeLeft: 20,
   pendingScore: 0,
   pendingMeta: '',
+  rewardStars: 0,
   // speedrun
   speedrunScore: 0,
   speedrunTotal: 0,
@@ -1109,7 +1192,7 @@ let state = {
   speedrunTimeLeft: 60,
   speedrunActive: false,
   // per-op tracking (for mixed mode results)
-  opStats: { add:{c:0,t:0}, sub:{c:0,t:0}, mul:{c:0,t:0}, div:{c:0,t:0} },
+  opStats: { add:{c:0,t:0}, sub:{c:0,t:0}, mul:{c:0,t:0}, div:{c:0,t:0}, fractions:{c:0,t:0}, decimal:{c:0,t:0}, geometry:{c:0,t:0}, bodmas:{c:0,t:0}, number:{c:0,t:0}, data:{c:0,t:0} },
   currentOp: 'add'
 };
 
@@ -1123,6 +1206,21 @@ let ttStreak = 0;
 function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
 function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+function roundTo(n, places = 2) { return Number(Number(n).toFixed(places)); }
+function formatAnswer(n) {
+  return Number.isInteger(n) ? String(n) : String(roundTo(n, 2)).replace(/\.0+$/, '');
+}
+function answersMatch(chosen, correct) {
+  const a = Number(chosen);
+  const b = Number(correct);
+  return Number.isFinite(a) && Number.isFinite(b) && Math.abs(a - b) < 0.01;
+}
+function getActiveOps() {
+  return state.ageGroup === 'senior' ? SENIOR_OPS : JUNIOR_OPS;
+}
+function makeFreshOpStats() {
+  return { add:{c:0,t:0}, sub:{c:0,t:0}, mul:{c:0,t:0}, div:{c:0,t:0}, fractions:{c:0,t:0}, decimal:{c:0,t:0}, geometry:{c:0,t:0}, bodmas:{c:0,t:0}, number:{c:0,t:0}, data:{c:0,t:0} };
+}
 
 /* ── AUDIO ── */
 let _audioCtx = null;
@@ -1207,6 +1305,7 @@ function getInsights(n) {
 function showInsights(n) {
   const wrap = document.getElementById('num-insight');
   wrap.innerHTML = '';
+  if (!Number.isInteger(Number(n))) return;
   const insights = getInsights(n);
   insights.forEach(ins => {
     const tag = document.createElement('span');
@@ -1284,12 +1383,20 @@ function genQuestion(forcedOp) {
   const lv = LEVELS[state.level];
   let a, b, ans, display, op = forcedOp || state.op;
 
-  if (state.op === 'mixed') op = pick(ALL_OPS);
+  if (state.op === 'mixed') op = pick(getActiveOps());
   state.currentOp = op;
+
+  if (state.mode === 'missing' && state.ageGroup === 'senior') {
+    return genSeniorQuestion(op, lv);
+  }
 
   if (state.mode === 'missing') {
     // Missing number: ?  op  b = ans  OR  a  op  ? = ans
     return genMissingQuestion(op, lv);
+  }
+
+  if (state.ageGroup === 'senior') {
+    return genSeniorQuestion(op, lv);
   }
 
   if (op === 'add') {
@@ -1308,6 +1415,147 @@ function genQuestion(forcedOp) {
     display = `${a} ÷ ${b} = ?`;
   }
   return { display, ans, op, a, b };
+}
+
+function genSeniorQuestion(op, lv) {
+  const band = state.level;
+  let a, b, c, d, ans, display, solution;
+
+  if (op === 'fractions') {
+    const denominators = band <= 1 ? [2,3,4,5,6,8,10] : [3,4,5,6,8,10,12];
+    b = pick(denominators);
+    d = Math.random() < 0.65 ? b : pick(denominators.filter(n => n !== b && (n % b === 0 || b % n === 0)));
+    a = rand(1, b - 1);
+    c = rand(1, d - 1);
+    if (band <= 1 || b === d || Math.random() < 0.5) {
+      d = b;
+      ans = roundTo((a + c) / b, 2);
+      display = `${a}/${b} + ${c}/${d} = ?`;
+      solution = `Same denominator: ${a}/${b} + ${c}/${b} = ${a + c}/${b} = ${formatAnswer(ans)}`;
+    } else {
+      const common = b * d;
+      ans = roundTo((a * d + c * b) / common, 2);
+      display = `${a}/${b} + ${c}/${d} = ? (decimal)`;
+      solution = `Use common parts: ${a}/${b} + ${c}/${d} = ${(a*d + c*b)}/${common} = ${formatAnswer(ans)}`;
+    }
+  } else if (op === 'decimal') {
+    const type = band <= 1 ? pick(['addDec','money','percent']) : pick(['addDec','percent','convert']);
+    if (type === 'addDec') {
+      a = roundTo(rand(10, 120) / 10, 1);
+      b = roundTo(rand(5, 90) / 10, 1);
+      ans = roundTo(a + b, 1);
+      display = `${a} + ${b} = ?`;
+      solution = `Line up the decimal points: ${a} + ${b} = ${formatAnswer(ans)}`;
+    } else if (type === 'money') {
+      a = rand(120, 750) / 100;
+      b = rand(80, 500) / 100;
+      ans = roundTo(a + b, 2);
+      display = `$${a.toFixed(2)} + $${b.toFixed(2)} = ?`;
+      solution = `Add dollars and cents carefully: ${a.toFixed(2)} + ${b.toFixed(2)} = ${ans.toFixed(2)}`;
+    } else if (type === 'convert') {
+      a = pick([0.25,0.5,0.75,0.1,0.2,0.4,0.8,1.25]);
+      ans = roundTo(a * 100, 0);
+      display = `${a} as a percentage = ?`;
+      solution = `Multiply by 100: ${a} × 100 = ${ans}%`;
+    } else {
+      const pct = pick([10,20,25,50,75]);
+      const whole = pick([40,60,80,100,120,160,200]);
+      ans = roundTo(whole * pct / 100, 0);
+      display = `${pct}% of ${whole} = ?`;
+      solution = `${pct}% means ${pct}/100, so ${whole} × ${pct}/100 = ${ans}`;
+    }
+  } else if (op === 'geometry') {
+    const type = band <= 1 ? pick(['perimeter','area','angle']) : pick(['perimeter','area','volume','angle']);
+    if (type === 'perimeter') {
+      a = rand(4 + band, 16 + band * 4);
+      b = rand(3 + band, 12 + band * 3);
+      ans = 2 * (a + b);
+      display = `Rectangle ${a} cm by ${b} cm: perimeter?`;
+      solution = `Perimeter is all sides: 2 × (${a} + ${b}) = ${ans} cm`;
+    } else if (type === 'area') {
+      a = rand(4 + band, 18 + band * 4);
+      b = rand(3 + band, 12 + band * 3);
+      ans = a * b;
+      display = `Rectangle ${a} cm by ${b} cm: area?`;
+      solution = `Area = length × width: ${a} × ${b} = ${ans} cm²`;
+    } else if (type === 'volume') {
+      a = rand(3, 8 + band);
+      b = rand(2, 7 + band);
+      c = rand(2, 6 + band);
+      ans = a * b * c;
+      display = `Box ${a}×${b}×${c} cm: volume?`;
+      solution = `Volume = length × width × height: ${a} × ${b} × ${c} = ${ans} cm³`;
+    } else {
+      a = pick([25,30,35,40,45,50,55,60,65,70,75]);
+      b = pick([30,40,45,50,55,60,65,70]);
+      ans = 180 - a - b;
+      display = `Triangle angles ${a}° and ${b}°: missing angle?`;
+      solution = `Angles in a triangle add to 180°: 180 - ${a} - ${b} = ${ans}°`;
+    }
+  } else if (op === 'bodmas') {
+    a = rand(2, 12 + band * 4);
+    b = rand(2, 10 + band * 2);
+    c = rand(2, 9 + band);
+    if (Math.random() < 0.5) {
+      ans = a + b * c;
+      display = `${a} + ${b} × ${c} = ?`;
+      solution = `Multiply first: ${b} × ${c} = ${b*c}, then add ${a} = ${ans}`;
+    } else {
+      ans = (a + b) * c;
+      display = `(${a} + ${b}) × ${c} = ?`;
+      solution = `Brackets first: ${a} + ${b} = ${a+b}, then × ${c} = ${ans}`;
+    }
+  } else if (op === 'number') {
+    const type = pick(['factor','multiple','pattern']);
+    if (type === 'factor') {
+      const nums = band <= 1 ? [24,30,36,42,48,54,60] : [72,84,90,96,108,120,144];
+      a = pick(nums);
+      const factors = getFactors(a);
+      ans = factors.length;
+      display = `How many factors does ${a} have?`;
+      solution = `Factors of ${a}: ${factors.join(', ')}. There are ${ans}.`;
+    } else if (type === 'multiple') {
+      a = rand(4, 12 + band);
+      b = rand(5, 11 + band);
+      ans = a * b;
+      display = `The ${b}th multiple of ${a} = ?`;
+      solution = `Multiples are repeated groups: ${a} × ${b} = ${ans}`;
+    } else {
+      a = rand(3, 12);
+      b = rand(2, 9 + band);
+      c = rand(2, 8 + band);
+      const fourth = a + 3 * b;
+      ans = a + 4 * b;
+      display = `${a}, ${a+b}, ${a+2*b}, ${fourth}, ?`;
+      solution = `The pattern adds ${b} each time, so ${fourth} + ${b} = ${ans}`;
+    }
+  } else {
+    const type = pick(['mean','range','chance']);
+    if (type === 'mean') {
+      a = rand(3, 9);
+      b = rand(3, 9);
+      c = rand(3, 9);
+      d = rand(3, 9);
+      const total = a + b + c + d;
+      ans = roundTo(total / 4, 2);
+      display = `Mean of ${a}, ${b}, ${c}, ${d} = ?`;
+      solution = `Mean = total ÷ number of values: (${a}+${b}+${c}+${d}) ÷ 4 = ${formatAnswer(ans)}`;
+    } else if (type === 'range') {
+      const values = shuffle([rand(8, 30), rand(8, 30), rand(8, 30), rand(8, 30), rand(8, 30)]);
+      ans = Math.max(...values) - Math.min(...values);
+      display = `Range of ${values.join(', ')} = ?`;
+      solution = `Range = highest - lowest: ${Math.max(...values)} - ${Math.min(...values)} = ${ans}`;
+    } else {
+      const red = rand(1, 5 + band);
+      const blue = rand(1, 5 + band);
+      const total = red + blue;
+      ans = roundTo(red / total, 2);
+      display = `${red} red, ${blue} blue counters. Chance of red? (decimal)`;
+      solution = `Chance = favourable ÷ total: ${red} ÷ ${total} = ${formatAnswer(ans)}`;
+    }
+  }
+
+  return { display, ans, op, a, b, c, d, solution };
 }
 
 function genMissingQuestion(op, lv) {
@@ -1340,20 +1588,22 @@ function genMissingQuestion(op, lv) {
 }
 
 function genChoices(ans) {
-  const set = new Set([ans]);
+  const set = new Set([formatAnswer(ans)]);
   let attempts = 0;
   while (set.size < 4 && attempts < 60) {
     attempts++;
     const spread = Math.max(3, Math.floor(ans * 0.35));
-    const delta = rand(1, spread);
-    const c = Math.random() < 0.5 ? ans + delta : Math.max(0, ans - delta);
-    if (c !== ans && c >= 0) set.add(c);
+    const decimalAnswer = !Number.isInteger(Number(ans));
+    const delta = decimalAnswer ? rand(1, Math.max(3, spread)) / 10 : rand(1, spread);
+    const c = roundTo(Math.random() < 0.5 ? Number(ans) + delta : Math.max(0, Number(ans) - delta), decimalAnswer ? 2 : 0);
+    if (!answersMatch(c, ans) && c >= 0) set.add(formatAnswer(c));
   }
   return shuffle([...set]);
 }
 
 function buildSolution(q) {
   const { op, a, b, ans } = q;
+  if (q.solution) return q.solution;
   if (!a || !b) return null;
   if (op === 'add') return `${a} + ${b} = ${ans}\nThink: start at ${a}, count up ${b}`;
   if (op === 'sub') return `${a} − ${b} = ${ans}\nThink: ${a} minus ${b} steps back`;
@@ -1392,8 +1642,7 @@ function endSpeedRun() {
   state.answered = true;
   document.querySelectorAll('.ans-btn, .type-submit').forEach(b => b.disabled = true);
 
-  // Override results for speedrun
-  state.score = state.speedrunScore;
+  // Override totals for speedrun while preserving point bonuses.
   state.correct = state.speedrunScore;
   state.totalQ = state.speedrunTotal;
   state.bestStreak = state.streak;
@@ -1412,7 +1661,7 @@ function loadQuestion() {
   document.getElementById('solution-area').innerHTML = '';
   document.getElementById('num-insight').innerHTML = '';
   document.getElementById('next-btn').disabled = true;
-  document.getElementById('q-card').className = 'q-card';
+  document.getElementById('q-card').className = 'q-card' + (state.ageGroup === 'senior' ? ' senior' : '');
   document.getElementById('combo-badge').className = 'combo-badge';
 
   currentQ = genQuestion();
@@ -1449,9 +1698,8 @@ function buildAnswerArea() {
     const inp = document.createElement('input');
     inp.className = 'type-input';
     inp.id = 'type-inp';
-    inp.type = 'tel';
-    inp.inputMode = 'numeric';
-    inp.pattern = '[0-9]*';
+    inp.type = 'text';
+    inp.inputMode = 'decimal';
     inp.placeholder = '?';
     inp.autocomplete = 'off';
     const btn = document.createElement('button');
@@ -1480,14 +1728,14 @@ function buildAnswerArea() {
 function handleTypeAnswer() {
   const inp = document.getElementById('type-inp');
   if (!inp || state.answered) return;
-  const val = parseInt(inp.value, 10);
+  const val = parseFloat(inp.value);
   if (isNaN(val)) { inp.placeholder = 'Type a number!'; return; }
-  handleAnswerResult(val === state.correctAns, inp);
+  handleAnswerResult(answersMatch(val, state.correctAns), inp);
 }
 
 function handleAnswer(btn, chosen) {
   if (state.answered) return;
-  handleAnswerResult(chosen === state.correctAns, btn, chosen);
+  handleAnswerResult(answersMatch(chosen, state.correctAns), btn, chosen);
 }
 
 function handleAnswerResult(isCorrect, el, chosen) {
@@ -1518,8 +1766,10 @@ function handleAnswerResult(isCorrect, el, chosen) {
     const basePoints = 10;
     const streakBonus = state.streak * 2;
     const points = (basePoints + streakBonus + timeBonus) * mult;
+    const earnedStars = 1 + (state.streak >= 4 ? 1 : 0) + (state.streak >= 7 ? 1 : 0);
 
     state.score += points;
+    state.rewardStars += earnedStars;
     state.streak++;
     state.bestStreak = Math.max(state.bestStreak, state.streak);
     state.correct++;
@@ -1540,7 +1790,7 @@ function handleAnswerResult(isCorrect, el, chosen) {
     else if (getMultiplier() > 1) playCombo();
     else playCorrect();
 
-    if (state.streak >= 3) showToast(`🔥 ${state.streak} in a row! +${points} pts`);
+    if (state.streak >= 3) showToast(`🔥 ${state.streak} in a row! +${points} pts · +${earnedStars} stars`);
 
     // show number insight for the answer
     showInsights(state.correctAns);
@@ -1556,10 +1806,10 @@ function handleAnswerResult(isCorrect, el, chosen) {
 
     // highlight correct in classic mode
     document.querySelectorAll('.ans-btn').forEach(b => {
-      if (parseInt(b.textContent) === state.correctAns) b.classList.add('correct');
+      if (answersMatch(b.textContent, state.correctAns)) b.classList.add('correct');
     });
 
-    document.getElementById('feedback').textContent = `The answer was ${state.correctAns} — keep going! 💪`;
+    document.getElementById('feedback').textContent = `The answer was ${formatAnswer(state.correctAns)} — keep going! 💪`;
     playWrong();
 
     // show solution breakdown
@@ -1604,11 +1854,11 @@ function timeUp() {
   updateComboDisplay();
   document.querySelectorAll('.ans-btn').forEach(b => {
     b.disabled = true;
-    if (parseInt(b.textContent) === state.correctAns) b.classList.add('correct');
+    if (answersMatch(b.textContent, state.correctAns)) b.classList.add('correct');
   });
   const typeInp = document.getElementById('type-inp');
   if (typeInp) typeInp.disabled = true;
-  document.getElementById('feedback').textContent = `⏰ Time's up! Answer: ${state.correctAns}`;
+  document.getElementById('feedback').textContent = `⏰ Time's up! Answer: ${formatAnswer(state.correctAns)}`;
   document.getElementById('q-card').classList.add('wrong-flash');
   playWrong();
   document.getElementById('next-btn').disabled = false;
@@ -1637,9 +1887,10 @@ function showResults() {
   else if (pct >= 0.5) { emoji = '👍'; title = 'Good start!'; }
   else                  { emoji = '🔁'; title = 'Keep practising!'; }
 
-  const opLabel = { add:'Addition', sub:'Subtraction', mul:'Multiplication', div:'Division', mixed:'Mixed' }[state.op];
+  const opLabel = OP_LABELS[state.op] || 'Mixed';
   const modeLabel = { classic:'Classic', type:'Type-It', missing:'Missing Number', speedrun:'Speed Run' }[state.mode];
-  const meta = `${modeLabel} · ${opLabel} · ${LEVELS[state.level].label}${state.timerOn ? ' · Timed' : ''}`;
+  const ageLabel = state.ageGroup === 'senior' ? 'Ages 10-12' : 'Ages 6-9';
+  const meta = `${ageLabel} · ${modeLabel} · ${opLabel} · ${LEVELS[state.level].label}${state.timerOn ? ' · Timed' : ''}`;
 
   document.getElementById('r-emoji').textContent = emoji;
   document.getElementById('r-title').textContent = title;
@@ -1647,6 +1898,7 @@ function showResults() {
   document.getElementById('r-correct').textContent     = state.correct;
   document.getElementById('r-score2').textContent      = state.score;
   document.getElementById('r-best-streak').textContent = state.bestStreak;
+  document.getElementById('r-reward').textContent = `⭐ ${state.rewardStars} reward stars collected`;
 
   // Stars
   const starsEl = document.getElementById('r-stars');
@@ -1669,20 +1921,20 @@ function showResults() {
   // Per-op breakdown if mixed
   const bkdn = document.getElementById('op-breakdown');
   const bkdnRows = document.getElementById('op-breakdown-rows');
-  const hasOpStats = state.op === 'mixed' && Object.values(state.opStats).some(s => s.t > 0);
+  const activeOps = getActiveOps();
+  const hasOpStats = state.op === 'mixed' && activeOps.some(op => state.opStats[op] && state.opStats[op].t > 0);
   bkdn.style.display = hasOpStats ? 'block' : 'none';
   if (hasOpStats) {
-    const opColors = { add: 'var(--green)', sub: 'var(--blue)', mul: 'var(--amber)', div: 'var(--coral)' };
-    const opNames  = { add: '+ Addition', sub: '− Subtraction', mul: '× Multiplication', div: '÷ Division' };
+    const opColors = { add: 'var(--green)', sub: 'var(--blue)', mul: 'var(--amber)', div: 'var(--coral)', fractions:'var(--teal)', decimal:'var(--green)', geometry:'var(--rose)', bodmas:'var(--blue)', number:'var(--amber)', data:'var(--purple)' };
     bkdnRows.innerHTML = '';
-    ALL_OPS.forEach(op => {
+    activeOps.forEach(op => {
       const s = state.opStats[op];
       if (!s.t) return;
       const pct2 = Math.round((s.c / s.t) * 100);
       const row = document.createElement('div');
       row.className = 'op-row';
       row.innerHTML = `
-        <div class="op-row-label">${opNames[op]}</div>
+        <div class="op-row-label">${OP_NAMES[op]}</div>
         <div class="op-row-bar-wrap"><div class="op-row-bar" style="width:0%;background:${opColors[op]}" data-pct="${pct2}"></div></div>
         <div class="op-row-pct">${pct2}%</div>
       `;
@@ -1726,7 +1978,8 @@ function resetGame() {
   Object.assign(state, {
     score:0, streak:0, bestStreak:0, correct:0, qIndex:0, answered:false,
     speedrunScore:0, speedrunTotal:0, speedrunActive:false, speedrunTimeLeft:60,
-    opStats: { add:{c:0,t:0}, sub:{c:0,t:0}, mul:{c:0,t:0}, div:{c:0,t:0} }
+    rewardStars: 0,
+    opStats: makeFreshOpStats()
   });
   document.getElementById('g-score').textContent = '0';
   document.getElementById('g-streak').textContent = '0';
@@ -1764,13 +2017,55 @@ document.querySelectorAll('.mode-pill').forEach(pill => {
   });
 });
 
-/* ── OP BUTTONS ── */
-document.querySelectorAll('.op-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.op-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    state.op = btn.dataset.op;
+/* ── AGE GROUP AND OP BUTTONS ── */
+const OP_BUTTONS = {
+  junior: [
+    ['add', '+ Add'],
+    ['sub', '− Sub'],
+    ['mul', '× Times'],
+    ['div', '÷ Divide'],
+    ['mixed', '⚡ Mix']
+  ],
+  senior: [
+    ['fractions', '½ Fractions'],
+    ['decimal', '% Decimals'],
+    ['geometry', '📐 Geometry'],
+    ['bodmas', '( ) Order'],
+    ['number', '# Patterns'],
+    ['data', '▦ Data'],
+    ['mixed', '⚡ Mix']
+  ]
+};
+
+function renderOpButtons() {
+  const wrap = document.querySelector('.op-selector');
+  wrap.innerHTML = '';
+  OP_BUTTONS[state.ageGroup].forEach(([op, label], index) => {
+    const btn = document.createElement('button');
+    btn.className = 'op-btn' + (state.op === op || (!OP_BUTTONS[state.ageGroup].some(([o]) => o === state.op) && index === 0) ? ' active' : '');
+    btn.dataset.op = op;
+    btn.textContent = label;
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.op-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      state.op = op;
+      resetGame();
+    });
+    wrap.appendChild(btn);
+    if (btn.classList.contains('active')) state.op = op;
+  });
+}
+
+document.querySelectorAll('.age-card').forEach(card => {
+  card.addEventListener('click', () => {
+    if (state.ageGroup === card.dataset.age) return;
+    document.querySelectorAll('.age-card').forEach(c => c.classList.remove('active'));
+    card.classList.add('active');
+    state.ageGroup = card.dataset.age;
+    state.op = state.ageGroup === 'senior' ? 'fractions' : 'add';
+    renderOpButtons();
     resetGame();
+    showToast(state.ageGroup === 'senior' ? 'Ages 10-12 mission unlocked!' : 'Ages 6-9 adventure ready!');
   });
 });
 
@@ -2079,6 +2374,7 @@ function launchConfetti() {
    INIT
 ═══════════════════════════════════════════ */
 function init() {
+  renderOpButtons();
   renderTTNums();
   renderTTGrid();
   newTTQuiz();
