@@ -168,19 +168,42 @@ main { max-width: 1120px; margin: 0 auto; padding: 18px 16px 64px; }
 .play-panel {
   min-width: 0;
 }
+.play-controls {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) minmax(220px, 1fr);
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.play-controls .options-row {
+  grid-column: 1 / -1;
+}
+.play-controls .control-section,
+.play-controls .options-row {
+  padding: 10px;
+}
+.play-controls .section-label {
+  margin-bottom: 7px;
+  font-size: 11px;
+}
+.play-controls .section-label b {
+  width: 21px;
+  height: 21px;
+  border-radius: 8px;
+  font-size: 12px;
+}
 
 .mission-hero {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 18px;
+  gap: 12px;
   align-items: center;
   background:
     linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,255,255,0.84)),
     linear-gradient(135deg, var(--blue-l), var(--green-l));
   border: 3px solid rgba(255,255,255,0.9);
-  border-radius: 24px;
-  padding: 22px;
-  margin-bottom: 16px;
+  border-radius: 18px;
+  padding: 12px 16px;
+  margin-bottom: 10px;
   box-shadow: var(--shadow);
 }
 .mission-kicker {
@@ -191,28 +214,28 @@ main { max-width: 1120px; margin: 0 auto; padding: 18px 16px 64px; }
   background: var(--purple-l);
   border: 2px solid #c4b5fd;
   border-radius: 99px;
-  padding: 5px 11px;
-  font-size: 12px;
+  padding: 3px 9px;
+  font-size: 11px;
   font-weight: 900;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 .mission-hero h1 {
-  font-size: clamp(28px, 4vw, 42px);
-  line-height: 0.95;
+  font-size: clamp(22px, 3vw, 32px);
+  line-height: 1;
   letter-spacing: 0;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 .mission-hero p {
   color: var(--muted);
-  font-size: 15px;
-  line-height: 1.45;
+  font-size: 13px;
+  line-height: 1.35;
   font-weight: 750;
-  max-width: 480px;
+  max-width: 620px;
 }
 .mission-orbit {
-  width: 128px;
-  height: 128px;
-  border-radius: 28px;
+  width: 72px;
+  height: 72px;
+  border-radius: 18px;
   display: grid;
   place-items: center;
   background: #fff;
@@ -221,7 +244,7 @@ main { max-width: 1120px; margin: 0 auto; padding: 18px 16px 64px; }
   transform: rotate(3deg);
 }
 .mission-orbit span {
-  font-size: 58px;
+  font-size: 34px;
   animation: floaty 2.6s ease-in-out infinite;
 }
 @keyframes floaty { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
@@ -1117,6 +1140,12 @@ main { max-width: 1120px; margin: 0 auto; padding: 18px 16px 64px; }
   .control-section {
     margin-bottom: 14px;
   }
+  .play-controls {
+    grid-template-columns: 1fr;
+  }
+  .play-controls .control-section {
+    margin-bottom: 0;
+  }
 }
 
 @media (max-width: 420px) {
@@ -1125,10 +1154,10 @@ main { max-width: 1120px; margin: 0 auto; padding: 18px 16px 64px; }
   .nav-tabs { justify-content: center; }
   .nav-actions { width: 100%; justify-content: center; }
   main { padding: 14px 12px 58px; }
-  .mission-hero { grid-template-columns: 1fr; padding: 18px; text-align: center; }
+  .mission-hero { grid-template-columns: 1fr; padding: 12px; text-align: center; }
   .mission-hero p { margin: 0 auto; }
-  .mission-orbit { width: 88px; height: 88px; margin: 0 auto; border-radius: 22px; }
-  .mission-orbit span { font-size: 42px; }
+  .mission-orbit { width: 64px; height: 64px; margin: 0 auto; border-radius: 16px; }
+  .mission-orbit span { font-size: 30px; }
   .age-selector { grid-template-columns: 1fr; }
   .age-card { min-height: 0; }
   .mode-pill { min-width: 118px; }
@@ -1202,44 +1231,47 @@ main { max-width: 1120px; margin: 0 auto; padding: 18px 16px 64px; }
       </div>
     </div>
 
-    <!-- Game Mode Pills -->
-    <div class="control-section">
-      <div class="section-label"><b>2</b> Pick how to play</div>
-      <div class="mode-banner">
-        <button class="mode-pill active" data-mode="classic">🎯 Classic<br><small style="font-size:10px;font-weight:700;opacity:0.8">4 choices</small></button>
-        <button class="mode-pill" data-mode="type">⌨️ Type It<br><small style="font-size:10px;font-weight:700;opacity:0.8">no hints</small></button>
-        <button class="mode-pill" data-mode="missing">❓ Missing<br><small style="font-size:10px;font-weight:700;opacity:0.8">find the gap</small></button>
-        <button class="mode-pill" data-mode="speedrun">⚡ Speed Run<br><small style="font-size:10px;font-weight:700;opacity:0.8">60 seconds</small></button>
-      </div>
-    </div>
-
-    <div class="control-section">
-      <div class="section-label"><b>3</b> Choose your maths skill</div>
-      <div class="op-selector">
-        <button class="op-btn active" data-op="add">+ Add</button>
-        <button class="op-btn" data-op="sub">− Sub</button>
-        <button class="op-btn" data-op="mul">× Times</button>
-        <button class="op-btn" data-op="div">÷ Divide</button>
-        <button class="op-btn" data-op="mixed">⚡ Mix</button>
-      </div>
-    </div>
-
-    <div class="options-row">
-      <span class="opt-label">Level:</span>
-      <div class="opt-group">
-        <button class="opt-chip active" data-level="0">Easy</button>
-        <button class="opt-chip" data-level="1">Medium</button>
-        <button class="opt-chip" data-level="2">Hard</button>
-        <button class="opt-chip" data-level="3">Expert</button>
-      </div>
-      <label class="timer-toggle">
-        <button class="toggle-switch" id="timer-toggle" aria-label="Toggle timer"></button>
-        Timer
-      </label>
-    </div>
     </div>
 
     <div class="play-panel">
+    <div class="play-controls">
+      <!-- Game Mode Pills -->
+      <div class="control-section">
+        <div class="section-label"><b>2</b> Pick how to play</div>
+        <div class="mode-banner">
+          <button class="mode-pill active" data-mode="classic">🎯 Classic<br><small style="font-size:10px;font-weight:700;opacity:0.8">4 choices</small></button>
+          <button class="mode-pill" data-mode="type">⌨️ Type It<br><small style="font-size:10px;font-weight:700;opacity:0.8">no hints</small></button>
+          <button class="mode-pill" data-mode="missing">❓ Missing<br><small style="font-size:10px;font-weight:700;opacity:0.8">find the gap</small></button>
+          <button class="mode-pill" data-mode="speedrun">⚡ Speed Run<br><small style="font-size:10px;font-weight:700;opacity:0.8">60 seconds</small></button>
+        </div>
+      </div>
+
+      <div class="control-section">
+        <div class="section-label"><b>3</b> Choose your maths skill</div>
+        <div class="op-selector">
+          <button class="op-btn active" data-op="add">+ Add</button>
+          <button class="op-btn" data-op="sub">− Sub</button>
+          <button class="op-btn" data-op="mul">× Times</button>
+          <button class="op-btn" data-op="div">÷ Divide</button>
+          <button class="op-btn" data-op="mixed">⚡ Mix</button>
+        </div>
+      </div>
+
+      <div class="options-row">
+        <span class="opt-label">Level:</span>
+        <div class="opt-group">
+          <button class="opt-chip active" data-level="0">Easy</button>
+          <button class="opt-chip" data-level="1">Medium</button>
+          <button class="opt-chip" data-level="2">Hard</button>
+          <button class="opt-chip" data-level="3">Expert</button>
+        </div>
+        <label class="timer-toggle">
+          <button class="toggle-switch" id="timer-toggle" aria-label="Toggle timer"></button>
+          Timer
+        </label>
+      </div>
+    </div>
+
     <div class="stats-bar">
       <div class="stat-card score-card">
         <div class="s-label">Score</div>
