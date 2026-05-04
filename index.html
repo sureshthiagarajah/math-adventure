@@ -1480,12 +1480,14 @@ let state = {
   speedrunActive: false,
   // per-op tracking (for mixed mode results)
   opStats: { add:{c:0,t:0}, sub:{c:0,t:0}, mul:{c:0,t:0}, div:{c:0,t:0}, fractions:{c:0,t:0}, decimal:{c:0,t:0}, geometry:{c:0,t:0}, bodmas:{c:0,t:0}, number:{c:0,t:0}, data:{c:0,t:0} },
-  currentOp: 'add'
+  currentOp: 'add',
+  seenQuestions: new Set()
 };
 
 let ttSelectedNum = 1;
 let ttCorrectAns = 0;
 let ttStreak = 0;
+let ttSeenQuestions = new Set();
 
 /* ═══════════════════════════════════════════
    UTILS
@@ -1969,7 +1971,13 @@ function loadQuestion() {
   document.getElementById('q-card').className = 'q-card' + (state.ageGroup === 'senior' ? ' senior' : '');
   document.getElementById('combo-badge').className = 'combo-badge';
 
-  currentQ = genQuestion();
+  // Avoid repeating the same question within a session (up to 8 attempts)
+  let _attempts = 0;
+  do {
+    currentQ = genQuestion();
+    _attempts++;
+  } while (_attempts < 8 && state.seenQuestions.has(currentQ.display));
+  state.seenQuestions.add(currentQ.display);
   state.correctAns = currentQ.ans;
 
   const iconEl = document.getElementById('q-icon');
@@ -2295,7 +2303,8 @@ function resetGame() {
     score:0, streak:0, bestStreak:0, correct:0, qIndex:0, answered:false,
     speedrunScore:0, speedrunTotal:0, speedrunActive:false, speedrunTimeLeft:60,
     rewardStars: 0,
-    opStats: makeFreshOpStats()
+    opStats: makeFreshOpStats(),
+    seenQuestions: new Set()
   });
   document.getElementById('g-score').textContent = '0';
   document.getElementById('g-streak').textContent = '0';
@@ -2414,6 +2423,7 @@ function renderTTNums() {
     btn.textContent = i;
     btn.addEventListener('click', () => {
       ttSelectedNum = i;
+      ttSeenQuestions.clear();
       document.querySelectorAll('.tt-num-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       renderTTGrid();
@@ -2467,7 +2477,14 @@ function renderTTGrid() {
 
 function newTTQuiz() {
   const a = ttSelectedNum;
-  const b = rand(1, 12);
+  let b;
+  let _att = 0;
+  do {
+    b = rand(1, 12);
+    _att++;
+  } while (_att < 8 && ttSeenQuestions.has(`${a}x${b}`));
+  if (ttSeenQuestions.size >= 12) ttSeenQuestions.clear(); // reset after full cycle
+  ttSeenQuestions.add(`${a}x${b}`);
   ttCorrectAns = a * b;
   document.getElementById('tt-q').textContent = `${a} × ${b} = ?`;
   document.getElementById('tt-input').value = '';
