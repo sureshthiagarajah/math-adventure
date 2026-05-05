@@ -1111,49 +1111,6 @@ main { max-width: 1120px; margin: 0 auto; padding: 18px 16px 64px; }
   text-align: center;
 }
 
-/* ── ONBOARDING SCREEN ── */
-#screen-onboarding {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 70vh;
-  text-align: center;
-  padding: 24px 16px;
-}
-.onboard-card {
-  background: var(--card);
-  border-radius: 28px;
-  border: 3px solid var(--border);
-  padding: 36px 32px;
-  max-width: 480px;
-  width: 100%;
-  box-shadow: var(--shadow);
-}
-.onboard-icon { font-size: 64px; margin-bottom: 12px; display: block; animation: floaty 2.6s ease-in-out infinite; }
-.onboard-title { font-size: 32px; font-weight: 950; margin-bottom: 8px; }
-.onboard-sub { font-size: 15px; color: var(--muted); font-weight: 700; margin-bottom: 28px; line-height: 1.5; }
-.onboard-age-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
-.onboard-age-btn {
-  padding: 18px 12px;
-  border-radius: 18px;
-  border: 3px solid var(--border);
-  background: var(--card);
-  cursor: pointer;
-  font-family: var(--font);
-  transition: all 0.2s;
-  text-align: center;
-}
-.onboard-age-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
-.onboard-age-btn .ob-emoji { font-size: 36px; display: block; margin-bottom: 8px; }
-.onboard-age-btn strong { display: block; font-size: 18px; font-weight: 950; margin-bottom: 4px; }
-.onboard-age-btn span { font-size: 12px; font-weight: 700; color: var(--muted); }
-.onboard-age-btn[data-age="junior"] { border-color: #6ee7b7; background: var(--green-l); }
-.onboard-age-btn[data-age="junior"] strong { color: var(--green-d); }
-.onboard-age-btn[data-age="senior"] { border-color: #c4b5fd; background: var(--purple-l); }
-.onboard-age-btn[data-age="senior"] strong { color: var(--purple-d); }
-.onboard-privacy { font-size: 11px; color: var(--muted); font-weight: 700; margin-top: 14px; }
-.onboard-privacy a { color: var(--blue); text-decoration: underline; cursor: pointer; }
 
 /* ── SESSION PROGRESS PANEL ── */
 .session-progress {
@@ -1410,30 +1367,8 @@ main { max-width: 1120px; margin: 0 auto; padding: 18px 16px 64px; }
 
 <main>
 
-  <!-- ══ ONBOARDING SCREEN ══ -->
-  <div class="screen active" id="screen-onboarding">
-    <div class="onboard-card">
-      <span class="onboard-icon">🧮</span>
-      <div class="onboard-title">Math Adventure!</div>
-      <div class="onboard-sub">Practise maths, earn stars, climb the leaderboard. First — who's playing?</div>
-      <div class="onboard-age-grid">
-        <button class="onboard-age-btn" data-age="junior" aria-label="Select Ages 6 to 9">
-          <span class="ob-emoji">🌱</span>
-          <strong>Ages 6–9</strong>
-          <span>Addition, subtraction, times tables &amp; division</span>
-        </button>
-        <button class="onboard-age-btn" data-age="senior" aria-label="Select Ages 10 to 12">
-          <span class="ob-emoji">🚀</span>
-          <strong>Ages 10–12</strong>
-          <span>Fractions, decimals, geometry &amp; patterns</span>
-        </button>
-      </div>
-      <div class="onboard-privacy">By playing you agree to our <a id="onboard-privacy-link">Privacy Policy</a>. No personal data is collected.</div>
-    </div>
-  </div>
-
   <!-- ══ GAME SCREEN ══ -->
-  <div class="screen" id="screen-game">
+  <div class="screen active" id="screen-game">
 
     <section class="mission-hero" aria-label="Math Adventure welcome">
       <div>
@@ -3126,29 +3061,12 @@ function openPrivacy() { document.getElementById('privacy-modal').classList.add(
 document.getElementById('privacy-close-btn').addEventListener('click', () => {
   document.getElementById('privacy-modal').classList.remove('open');
 });
-document.getElementById('onboard-privacy-link').addEventListener('click', openPrivacy);
 document.getElementById('footer-privacy-link').addEventListener('click', openPrivacy);
 
 /* ═══════════════════════════════════════════
    ONBOARDING
 ═══════════════════════════════════════════ */
-document.querySelectorAll('.onboard-age-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    state.ageGroup = btn.dataset.age;
-    state.op = state.ageGroup === 'senior' ? 'fractions' : 'add';
-    // Sync age-card UI
-    document.querySelectorAll('.age-card').forEach(c => {
-      c.classList.toggle('active', c.dataset.age === state.ageGroup);
-    });
-    renderOpButtons();
-    // Switch screens: hide onboarding, show game
-    document.getElementById('screen-onboarding').classList.remove('active');
-    document.getElementById('screen-game').classList.add('active');
-    document.querySelector('.nav-tab[data-screen="game"]').classList.add('active');
-    resetGame();
-    showToast(state.ageGroup === 'senior' ? 'Ages 10-12 — let's go! 🚀' : 'Ages 6-9 — adventure starts! 🌱');
-  });
-});
+
 
 function init() {
   updateSoundButton();
@@ -3158,7 +3076,7 @@ function init() {
   newTTQuiz();
   updateNavHiscore();
   updateSessionProgress();
-  // Don't call loadQuestion here — wait for onboarding to complete
+  loadQuestion();
 }
 
 if (document.readyState === 'loading') {
