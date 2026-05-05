@@ -1,0 +1,3171 @@
+<!DOCTYPE html>
+<!--
+  Math Adventure
+  Copyright (c) 2026 Suresh Thiagarajah. All rights reserved.
+
+  This file is published for children to play the game online.
+  It is not open source. Copying, redistributing, modifying, or
+  creating derivative works requires written permission from the owner.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+<meta name="author" content="Suresh Thiagarajah">
+<meta name="copyright" content="Copyright (c) 2026 Suresh Thiagarajah. All rights reserved.">
+<title>Math Adventure - Age Group Edition</title>
+<style>
+:root {
+  --green:   #10b981; --green-d: #059669; --green-l: #d1fae5;
+  --blue:    #3b82f6; --blue-d:  #2563eb; --blue-l:  #dbeafe;
+  --amber:   #f59e0b; --amber-d: #d97706; --amber-l: #fef3c7;
+  --red:     #ef4444; --red-d:   #dc2626; --red-l:   #fee2e2;
+  --purple:  #8b5cf6; --purple-d:#7c3aed; --purple-l:#ede9fe;
+  --coral:   #f97316; --coral-d: #ea580c; --coral-l: #ffedd5;
+  --teal:    #06b6d4; --teal-d:  #0891b2; --teal-l:  #cffafe;
+  --rose:    #f43f5e; --rose-d:  #e11d48; --rose-l:  #ffe4e6;
+  --bg:      #f8f7ff;
+  --card:    #ffffff;
+  --text:    #1a1523;
+  --muted:   #6b7280;
+  --border:  #e5e7eb;
+  --radius:  20px;
+  --shadow:  0 10px 30px rgba(31,41,55,0.10);
+  --shadow-soft: 0 6px 18px rgba(31,41,55,0.08);
+  --font:    system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --mono:    'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background-image:
+    radial-gradient(ellipse at 10% 8%, rgba(59,130,246,0.12) 0%, transparent 42%),
+    radial-gradient(ellipse at 90% 12%, rgba(16,185,129,0.12) 0%, transparent 38%),
+    radial-gradient(ellipse at 50% 95%, rgba(245,158,11,0.12) 0%, transparent 45%);
+  min-height: 100vh;
+}
+
+/* ── NAV ── */
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background: rgba(255,255,255,0.95);
+  border-bottom: 2px solid var(--border);
+  backdrop-filter: blur(12px);
+  flex-wrap: wrap;
+  gap: 10px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  font-size: 21px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  color: var(--text);
+  font-family: var(--font);
+}
+.logo span { color: var(--purple); }
+.logo small { font-size: 10px; font-weight: 700; color: var(--muted); background: var(--purple-l); padding: 2px 6px; border-radius: 99px; margin-left: 6px; vertical-align: middle; }
+
+.nav-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.nav-tab {
+  padding: 9px 15px;
+  border-radius: 99px;
+  border: 2px solid var(--border);
+  font-size: 13px;
+  font-weight: 800;
+  font-family: var(--font);
+  cursor: pointer;
+  background: transparent;
+  color: var(--muted);
+  transition: all 0.2s;
+}
+.nav-tab.active, .nav-tab:hover {
+  background: var(--text);
+  color: #fff;
+  border-color: var(--text);
+}
+button:focus-visible,
+input:focus-visible {
+  outline: 4px solid rgba(59,130,246,0.35);
+  outline-offset: 2px;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.sound-btn {
+  min-width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  border: 2px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: var(--shadow-soft);
+}
+.sound-btn[aria-pressed="true"] {
+  background: var(--green-l);
+  border-color: var(--green);
+}
+.hiscore {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--muted);
+  white-space: nowrap;
+  background: var(--amber-l);
+  border: 2px solid #fcd34d;
+  color: var(--amber-d);
+  border-radius: 99px;
+  padding: 8px 12px;
+}
+.hiscore b { color: var(--amber-d); }
+
+/* ── MAIN ── */
+main { max-width: 1120px; margin: 0 auto; padding: 18px 16px 64px; }
+
+/* ── SCREENS ── */
+.screen { display: none; }
+.screen.active { display: block; }
+
+#screen-game.active {
+  display: grid;
+  grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+.mission-hero { grid-column: 1 / -1; }
+.setup-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: sticky;
+  top: 86px;
+}
+.play-panel {
+  min-width: 0;
+}
+.play-controls {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) minmax(220px, 1fr);
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.play-controls .options-row {
+  grid-column: 1 / -1;
+}
+.play-controls .control-section,
+.play-controls .options-row {
+  padding: 10px;
+}
+.play-controls .section-label {
+  margin-bottom: 7px;
+  font-size: 11px;
+}
+.play-controls .section-label b {
+  width: 21px;
+  height: 21px;
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+.mission-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,255,255,0.84)),
+    linear-gradient(135deg, var(--blue-l), var(--green-l));
+  border: 3px solid rgba(255,255,255,0.9);
+  border-radius: 18px;
+  padding: 12px 16px;
+  margin-bottom: 10px;
+  box-shadow: var(--shadow);
+}
+.mission-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--purple-d);
+  background: var(--purple-l);
+  border: 2px solid #c4b5fd;
+  border-radius: 99px;
+  padding: 3px 9px;
+  font-size: 11px;
+  font-weight: 900;
+  margin-bottom: 5px;
+}
+.mission-hero h1 {
+  font-size: clamp(22px, 3vw, 32px);
+  line-height: 1;
+  letter-spacing: 0;
+  margin-bottom: 4px;
+}
+.mission-hero p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.35;
+  font-weight: 750;
+  max-width: 620px;
+}
+.mission-orbit {
+  width: 72px;
+  height: 72px;
+  border-radius: 18px;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  border: 3px solid var(--border);
+  box-shadow: var(--shadow-soft);
+  transform: rotate(3deg);
+}
+.mission-orbit span {
+  font-size: 34px;
+  animation: floaty 2.6s ease-in-out infinite;
+}
+@keyframes floaty { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
+
+.control-section {
+  background: rgba(255,255,255,0.82);
+  border: 2px solid var(--border);
+  border-radius: 20px;
+  padding: 14px;
+  margin-bottom: 0;
+  box-shadow: var(--shadow-soft);
+}
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 950;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 10px;
+}
+.section-label b {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 9px;
+  background: var(--text);
+  color: #fff;
+  font-size: 13px;
+}
+
+/* ── MODE BANNER ── */
+.mode-banner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.mode-pill {
+  min-width: 0;
+  padding: 11px 16px;
+  border-radius: 16px;
+  border: 2.5px solid transparent;
+  font-size: 13px;
+  font-weight: 800;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  line-height: 1.3;
+  text-align: center;
+}
+.mode-pill[data-mode="classic"]  { background: var(--blue-l);   color: var(--blue-d);   border-color: #93c5fd; }
+.mode-pill[data-mode="type"]     { background: var(--purple-l); color: var(--purple-d); border-color: #c4b5fd; }
+.mode-pill[data-mode="missing"]  { background: var(--teal-l);   color: var(--teal-d);   border-color: #67e8f9; }
+.mode-pill[data-mode="speedrun"] { background: var(--rose-l);   color: var(--rose-d);   border-color: #fda4af; }
+.mode-pill[data-mode="mixed"]    { background: var(--amber-l);  color: var(--amber-d);  border-color: #fcd34d; }
+
+.mode-pill.active { transform: scale(1.04); box-shadow: 0 2px 12px rgba(0,0,0,0.12); }
+.mode-pill[data-mode="classic"].active  { background: var(--blue);   color: #fff; border-color: var(--blue-d); }
+.mode-pill[data-mode="type"].active     { background: var(--purple); color: #fff; border-color: var(--purple-d); }
+.mode-pill[data-mode="missing"].active  { background: var(--teal);   color: #fff; border-color: var(--teal-d); }
+.mode-pill[data-mode="speedrun"].active { background: var(--rose);   color: #fff; border-color: var(--rose-d); }
+.mode-pill[data-mode="mixed"].active    { background: var(--amber);  color: #fff; border-color: var(--amber-d); }
+
+/* age selector */
+.age-selector {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+.age-card {
+  background: var(--card);
+  border: 3px solid var(--border);
+  border-radius: 18px;
+  padding: 16px;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+  font-family: var(--font);
+  color: var(--text);
+  min-height: 104px;
+}
+.age-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.age-card.active { border-color: var(--purple); box-shadow: 0 8px 24px rgba(139,92,246,0.18); }
+.age-card strong { display: block; font-size: 18px; font-weight: 950; margin-bottom: 5px; }
+.age-card span { display: block; font-size: 12px; font-weight: 800; color: var(--muted); line-height: 1.4; }
+.age-card::before {
+  content: 'Start here';
+  display: inline-flex;
+  font-size: 10px;
+  font-weight: 950;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 7px;
+}
+.age-card.active::before { content: 'Selected'; color: var(--purple-d); }
+.age-card[data-age="junior"].active strong { color: var(--green-d); }
+.age-card[data-age="senior"].active strong { color: var(--purple-d); }
+
+/* op selector */
+.op-selector {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+}
+.op-btn {
+  min-height: 52px;
+  padding: 12px 8px;
+  border-radius: 15px;
+  border: 2.5px solid transparent;
+  font-size: 13px;
+  font-weight: 900;
+  font-family: var(--font);
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+  line-height: 1.3;
+}
+.op-btn[data-op="add"]   { background: var(--green-l);  color: var(--green-d);  border-color: #6ee7b7; }
+.op-btn[data-op="sub"]   { background: var(--blue-l);   color: var(--blue-d);   border-color: #93c5fd; }
+.op-btn[data-op="mul"]   { background: var(--amber-l);  color: var(--amber-d);  border-color: #fcd34d; }
+.op-btn[data-op="div"]   { background: var(--coral-l);  color: var(--coral-d);  border-color: #fdba74; }
+.op-btn[data-op="mixed"] { background: var(--purple-l); color: var(--purple-d); border-color: #c4b5fd; }
+.op-btn[data-op="fractions"] { background: var(--teal-l); color: var(--teal-d); border-color: #67e8f9; }
+.op-btn[data-op="decimal"] { background: var(--green-l); color: var(--green-d); border-color: #6ee7b7; }
+.op-btn[data-op="geometry"] { background: var(--rose-l); color: var(--rose-d); border-color: #fda4af; }
+.op-btn[data-op="bodmas"] { background: var(--blue-l); color: var(--blue-d); border-color: #93c5fd; }
+.op-btn[data-op="number"] { background: var(--amber-l); color: var(--amber-d); border-color: #fcd34d; }
+.op-btn[data-op="data"] { background: var(--purple-l); color: var(--purple-d); border-color: #c4b5fd; }
+.op-btn:hover { transform: translateY(-1px); box-shadow: var(--shadow-soft); }
+.op-btn.active { transform: scale(1.03); box-shadow: var(--shadow-soft); }
+.op-btn[data-op="add"].active   { background: var(--green);  color: #fff; border-color: var(--green-d); }
+.op-btn[data-op="sub"].active   { background: var(--blue);   color: #fff; border-color: var(--blue-d); }
+.op-btn[data-op="mul"].active   { background: var(--amber);  color: #fff; border-color: var(--amber-d); }
+.op-btn[data-op="div"].active   { background: var(--coral);  color: #fff; border-color: var(--coral-d); }
+.op-btn[data-op="mixed"].active { background: var(--purple); color: #fff; border-color: var(--purple-d); }
+.op-btn[data-op="fractions"].active { background: var(--teal); color: #fff; border-color: var(--teal-d); }
+.op-btn[data-op="decimal"].active { background: var(--green); color: #fff; border-color: var(--green-d); }
+.op-btn[data-op="geometry"].active { background: var(--rose); color: #fff; border-color: var(--rose-d); }
+.op-btn[data-op="bodmas"].active { background: var(--blue); color: #fff; border-color: var(--blue-d); }
+.op-btn[data-op="number"].active { background: var(--amber); color: #fff; border-color: var(--amber-d); }
+.op-btn[data-op="data"].active { background: var(--purple); color: #fff; border-color: var(--purple-d); }
+
+/* options row */
+.options-row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  background: rgba(255,255,255,0.86);
+  border: 2px solid var(--border);
+  border-radius: 18px;
+  padding: 12px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow-soft);
+}
+.opt-label { font-size: 12px; font-weight: 800; color: var(--muted); }
+.opt-group { display: flex; gap: 7px; flex-wrap: wrap; }
+.opt-chip {
+  padding: 9px 14px;
+  border-radius: 99px;
+  border: 2px solid var(--border);
+  font-size: 12px;
+  font-weight: 800;
+  font-family: var(--font);
+  cursor: pointer;
+  background: var(--card);
+  color: var(--muted);
+  transition: all 0.15s;
+}
+.opt-chip.active { background: var(--text); color: #fff; border-color: var(--text); }
+
+.timer-toggle {
+  margin-left: 0;
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--muted);
+  cursor: pointer;
+}
+.timer-toggle, .sound-btn, .nav-tab, .mode-pill, .op-btn, .opt-chip, .age-card {
+  touch-action: manipulation;
+}
+.toggle-switch {
+  width: 38px; height: 21px;
+  background: var(--border);
+  border-radius: 99px;
+  position: relative;
+  transition: background 0.2s;
+  cursor: pointer;
+  border: none;
+  flex-shrink: 0;
+}
+.toggle-switch.on { background: var(--green); }
+.toggle-switch::after {
+  content: '';
+  position: absolute;
+  width: 15px; height: 15px;
+  background: #fff;
+  border-radius: 50%;
+  top: 3px; left: 3px;
+  transition: transform 0.2s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+.toggle-switch.on::after { transform: translateX(17px); }
+
+/* stats bar */
+.stats-bar {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 9px;
+  margin-bottom: 14px;
+}
+.stat-card {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 11px 7px;
+  text-align: center;
+  border: 2px solid var(--border);
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+}
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--border);
+  border-radius: 99px;
+}
+.stat-card.score-card::before { background: var(--green); }
+.stat-card.streak-card::before { background: var(--amber); }
+.stat-card.mult-card::before { background: var(--purple); }
+.stat-card.timer-card::before { background: var(--red); }
+.stat-card .s-label { font-size: 9px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.stat-card .s-val   { font-size: 22px; font-weight: 950; color: var(--text); line-height: 1.1; font-family: var(--mono); }
+.stat-card.timer-card .s-val { color: var(--red); }
+.stat-card.timer-card.warn .s-val { animation: pulse 0.5s infinite alternate; }
+.stat-card.mult-card .s-val { color: var(--purple); }
+.mult-glow { animation: multPop 0.5s ease; }
+@keyframes multPop { 0%{transform:scale(1)} 50%{transform:scale(1.4)} 100%{transform:scale(1)} }
+
+@keyframes pulse { from { opacity:1; } to { opacity:0.4; } }
+
+/* progress */
+.prog-wrap {
+  background: var(--border);
+  border-radius: 99px;
+  height: 8px;
+  margin-bottom: 18px;
+  overflow: hidden;
+  position: relative;
+}
+.prog-fill {
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--green), var(--teal));
+  transition: width 0.4s ease;
+}
+/* speedrun bar */
+.speedrun-bar {
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--rose), var(--amber));
+  transition: width 0.3s linear;
+}
+
+/* question card */
+.q-card {
+  background: var(--card);
+  border-radius: 26px;
+  border: 3px solid var(--border);
+  padding: 28px 22px 22px;
+  text-align: center;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow);
+  transition: border-color 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.q-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: var(--border);
+  border-radius: 99px;
+  transition: background 0.3s;
+}
+.q-card.correct-flash { border-color: var(--green); }
+.q-card.correct-flash::before { background: var(--green); }
+.q-card.wrong-flash   { border-color: var(--red); }
+.q-card.wrong-flash::before { background: var(--red); }
+
+.q-icon { font-size: 40px; line-height: 1; margin-bottom: 6px; display: block; transition: transform 0.3s; }
+.q-icon.bounce { animation: iconBounce 0.4s ease; }
+@keyframes iconBounce { 0%,100%{transform:scale(1)} 50%{transform:scale(1.35)} }
+
+/* combo badge */
+.combo-badge {
+  position: absolute;
+  top: 10px; right: 14px;
+  background: var(--purple);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 900;
+  padding: 3px 10px;
+  border-radius: 99px;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.25s;
+  font-family: var(--mono);
+}
+.combo-badge.show { opacity: 1; transform: scale(1); }
+.combo-badge.x2 { background: var(--amber); }
+.combo-badge.x3 { background: var(--rose); animation: hotStreak 0.6s ease infinite alternate; }
+@keyframes hotStreak { from{ box-shadow: 0 0 0 rgba(244,63,94,0); } to{ box-shadow: 0 0 10px rgba(244,63,94,0.5); } }
+
+.q-text {
+  font-size: 54px;
+  font-weight: 950;
+  letter-spacing: 0;
+  color: var(--text);
+  margin-bottom: 20px;
+  line-height: 1;
+  font-family: var(--mono);
+}
+.q-card.senior .q-text {
+  font-size: 31px;
+  letter-spacing: 0;
+  line-height: 1.25;
+}
+
+/* number insight strip */
+.num-insight {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+  min-height: 26px;
+}
+.insight-tag {
+  font-size: 11px;
+  font-weight: 800;
+  padding: 3px 9px;
+  border-radius: 99px;
+  animation: fadeIn 0.3s ease;
+}
+@keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
+.insight-tag.prime   { background: var(--purple-l); color: var(--purple-d); }
+.insight-tag.square  { background: var(--amber-l);  color: var(--amber-d); }
+.insight-tag.even    { background: var(--teal-l);   color: var(--teal-d); }
+.insight-tag.odd     { background: var(--blue-l);   color: var(--blue-d); }
+.insight-tag.factor  { background: var(--green-l);  color: var(--green-d); }
+.insight-tag.fib     { background: var(--coral-l);  color: var(--coral-d); }
+.insight-tag.perfect { background: var(--rose-l);   color: var(--rose-d); }
+
+/* answers */
+.answers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  max-width: 340px;
+  margin: 0 auto;
+}
+.ans-btn {
+  min-height: 74px;
+  padding: 18px 10px;
+  font-size: 25px;
+  font-weight: 950;
+  font-family: var(--mono);
+  border-radius: 15px;
+  border: 3px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  cursor: pointer;
+  transition: transform 0.12s, background 0.12s, border-color 0.12s;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+  overflow: hidden;
+}
+.ans-btn:hover { transform: scale(1.04); background: var(--bg); }
+.ans-btn:active { transform: scale(0.96); }
+.ans-btn.correct { background: var(--green-l); border-color: var(--green); color: var(--green-d); transform: scale(1.06); }
+.ans-btn.wrong   { background: var(--red-l);   border-color: var(--red);   color: var(--red-d);   transform: scale(0.94); }
+.ans-btn:disabled { pointer-events: none; }
+
+/* type answer input */
+.type-answer-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  max-width: 300px;
+  margin: 0 auto;
+}
+.type-input {
+  width: 180px;
+  height: 72px;
+  font-size: 36px;
+  font-weight: 900;
+  font-family: var(--mono);
+  text-align: center;
+  border-radius: 16px;
+  border: 3px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  transition: border-color 0.2s;
+}
+.type-input:focus { border-color: var(--purple); box-shadow: 0 0 0 3px var(--purple-l); }
+.type-input.correct { border-color: var(--green); background: var(--green-l); color: var(--green-d); }
+.type-input.wrong   { border-color: var(--red);   background: var(--red-l);   color: var(--red-d); }
+.type-submit {
+  min-height: 52px;
+  padding: 14px 32px;
+  font-size: 17px;
+  font-weight: 900;
+  font-family: var(--font);
+  border-radius: 14px;
+  border: 3px solid var(--purple-d);
+  background: var(--purple);
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.1s, opacity 0.1s;
+}
+.type-submit:active { transform: scale(0.96); }
+
+/* solution breakdown */
+.solution-wrap {
+  margin-top: 12px;
+  background: var(--amber-l);
+  border: 2px solid var(--amber);
+  border-radius: 14px;
+  padding: 12px 16px;
+  text-align: left;
+  max-width: 340px;
+  margin-left: auto;
+  margin-right: auto;
+  animation: fadeIn 0.3s ease;
+}
+.solution-wrap .sol-title { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.06em; color: var(--amber-d); margin-bottom: 6px; }
+.solution-wrap .sol-steps { font-size: 13px; font-weight: 700; color: var(--text); line-height: 1.7; font-family: var(--mono); }
+
+/* feedback */
+.feedback-text {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 900;
+  min-height: 26px;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+
+.next-btn {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+  min-height: 56px;
+  padding: 16px;
+  font-size: 17px;
+  font-weight: 950;
+  font-family: var(--font);
+  border-radius: 15px;
+  border: 3px solid var(--green-d);
+  background: var(--green);
+  color: #fff;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+}
+.next-btn:disabled { opacity: 0.3; cursor: default; }
+.next-btn:not(:disabled):active { transform: scale(0.97); }
+
+/* speedrun overlay */
+.speedrun-count {
+  text-align: center;
+  font-size: 48px;
+  font-weight: 900;
+  font-family: var(--mono);
+  color: var(--rose);
+  margin-bottom: 8px;
+  line-height: 1;
+}
+.speedrun-count small {
+  display: block;
+  font-size: 14px;
+  color: var(--muted);
+  font-family: var(--font);
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+/* ── RESULTS ── */
+.results-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 3px solid var(--border);
+  padding: 32px 24px;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.results-emoji { font-size: 64px; display: block; margin-bottom: 10px; animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+@keyframes popIn { from{transform:scale(0)} to{transform:scale(1)} }
+.results-title { font-size: 30px; font-weight: 900; margin-bottom: 5px; }
+.results-sub   { font-size: 15px; color: var(--muted); font-weight: 700; margin-bottom: 20px; }
+.results-grid  {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.r-stat { background: var(--bg); border-radius: 13px; padding: 12px 6px; }
+.r-stat .rv { font-size: 26px; font-weight: 900; color: var(--text); font-family: var(--mono); }
+.r-stat .rl { font-size: 11px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; margin-top: 2px; }
+.results-stars { display: flex; justify-content: center; gap: 10px; margin-bottom: 16px; }
+.star-svg { width: 40px; height: 40px; }
+.reward-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--amber-l);
+  color: var(--amber-d);
+  border: 2px solid #fcd34d;
+  border-radius: 99px;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 900;
+  margin-bottom: 16px;
+}
+
+/* op breakdown */
+.op-breakdown {
+  background: var(--bg);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 18px;
+  text-align: left;
+}
+.op-breakdown h4 { font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-bottom: 10px; }
+.op-row { display: flex; align-items: center; gap: 10px; margin-bottom: 7px; }
+.op-row:last-child { margin-bottom: 0; }
+.op-row-label { font-size: 13px; font-weight: 800; width: 90px; flex-shrink: 0; }
+.op-row-bar-wrap { flex: 1; background: var(--border); border-radius: 99px; height: 8px; }
+.op-row-bar { height: 100%; border-radius: 99px; transition: width 0.6s ease; }
+.op-row-pct { font-size: 12px; font-weight: 900; font-family: var(--mono); width: 34px; text-align: right; flex-shrink: 0; }
+
+.btn-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.btn-primary {
+  padding: 13px 26px;
+  font-size: 15px; font-weight: 900;
+  font-family: var(--font);
+  border-radius: 13px;
+  border: 3px solid var(--blue-d);
+  background: var(--blue);
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+.btn-primary:active { transform: scale(0.97); }
+.btn-secondary {
+  padding: 13px 26px;
+  font-size: 15px; font-weight: 900;
+  font-family: var(--font);
+  border-radius: 13px;
+  border: 3px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+.btn-secondary:active { transform: scale(0.97); }
+
+/* ── TIMES TABLES SCREEN ── */
+.tt-controls {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+  align-items: center;
+}
+.tt-label { font-size: 13px; font-weight: 800; color: var(--muted); }
+.tt-num-btn {
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  border: 2px solid var(--border);
+  font-size: 14px;
+  font-weight: 900;
+  font-family: var(--mono);
+  cursor: pointer;
+  background: var(--card);
+  color: var(--muted);
+  transition: all 0.15s;
+}
+.tt-num-btn.active { background: var(--purple); color: #fff; border-color: var(--purple-d); }
+.tt-grid-wrap { overflow-x: auto; margin-bottom: 20px; }
+.tt-grid {
+  display: grid;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 2px solid var(--border);
+  min-width: 340px;
+}
+.tt-cell {
+  padding: 9px 5px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: var(--mono);
+  border: 1px solid var(--border);
+  background: var(--card);
+  transition: background 0.15s;
+  cursor: default;
+}
+.tt-cell.header-row { background: var(--text); color: #fff; font-weight: 900; font-size: 12px; }
+.tt-cell.header-col { background: var(--purple-l); color: var(--purple-d); font-weight: 900; }
+.tt-cell.highlight  { background: var(--purple-l); color: var(--purple-d); font-weight: 900; }
+.tt-cell.corner     { background: var(--purple);   color: #fff; font-weight: 900; }
+.tt-cell:hover:not(.header-row):not(.header-col):not(.corner) { background: #fef3c7; cursor: pointer; }
+.tt-cell.prime-cell  { color: var(--rose-d); font-weight: 900; }
+.tt-cell.square-cell { background: #fef9c3; }
+
+.tt-legend {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.tt-legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; color: var(--muted); }
+.tt-legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+.tt-quiz-wrap {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 3px solid var(--border);
+  padding: 22px;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.tt-quiz-title { font-size: 14px; font-weight: 800; color: var(--muted); margin-bottom: 10px; }
+.tt-quiz-q     { font-size: 36px; font-weight: 900; margin-bottom: 14px; font-family: var(--mono); }
+.tt-quiz-input-row { display: flex; gap: 10px; justify-content: center; align-items: center; }
+.tt-quiz-input {
+  width: 88px; height: 52px;
+  font-size: 24px; font-weight: 900;
+  font-family: var(--mono);
+  text-align: center;
+  border-radius: 13px;
+  border: 3px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.tt-quiz-input:focus { border-color: var(--purple); }
+.tt-submit {
+  padding: 13px 22px;
+  font-size: 15px; font-weight: 900;
+  font-family: var(--font);
+  border-radius: 13px;
+  border: 3px solid var(--purple-d);
+  background: var(--purple);
+  color: #fff;
+  cursor: pointer;
+}
+.tt-feedback { font-size: 15px; font-weight: 800; min-height: 22px; margin-top: 10px; }
+.tt-streak-bar { margin-top: 12px; display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
+.tt-streak-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--border); transition: background 0.2s; }
+.tt-streak-dot.lit { background: var(--green); }
+
+/* ── NUMBER EXPLORER ── */
+.explorer-wrap {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 3px solid var(--border);
+  padding: 24px;
+  box-shadow: var(--shadow);
+}
+.explorer-title { font-size: 18px; font-weight: 900; margin-bottom: 16px; }
+.explorer-input-row { display: flex; gap: 10px; align-items: center; margin-bottom: 20px; }
+.explorer-input {
+  flex: 1;
+  height: 56px;
+  font-size: 28px;
+  font-weight: 900;
+  font-family: var(--mono);
+  text-align: center;
+  border-radius: 14px;
+  border: 3px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.explorer-input:focus { border-color: var(--teal); }
+.explorer-go {
+  padding: 14px 20px;
+  font-size: 15px; font-weight: 900;
+  font-family: var(--font);
+  border-radius: 13px;
+  border: 3px solid var(--teal-d);
+  background: var(--teal);
+  color: #fff;
+  cursor: pointer;
+}
+.explorer-facts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.explorer-fact {
+  background: var(--bg);
+  border-radius: 13px;
+  padding: 12px 14px;
+  border: 2px solid var(--border);
+}
+.explorer-fact .ef-label { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-bottom: 4px; }
+.explorer-fact .ef-val { font-size: 15px; font-weight: 800; color: var(--text); word-break: break-all; line-height: 1.4; }
+.explorer-fact.full-width { grid-column: 1 / -1; }
+.explorer-placeholder { text-align: center; color: var(--muted); font-weight: 700; font-size: 15px; padding: 30px 0; }
+
+/* ── LEADERBOARD SCREEN ── */
+.lb-header { text-align: center; margin-bottom: 20px; }
+.lb-header h2 { font-size: 26px; font-weight: 900; }
+.lb-header p  { color: var(--muted); font-weight: 700; font-size: 13px; }
+.lb-list { display: flex; flex-direction: column; gap: 8px; }
+.lb-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--card);
+  border-radius: 13px;
+  border: 2px solid var(--border);
+  padding: 12px 14px;
+}
+.lb-rank { font-size: 18px; font-weight: 900; width: 30px; text-align: center; }
+.lb-rank.gold   { color: #f59e0b; }
+.lb-rank.silver { color: #94a3b8; }
+.lb-rank.bronze { color: #b45309; }
+.lb-info { flex: 1; }
+.lb-name { font-size: 15px; font-weight: 800; }
+.lb-meta { font-size: 11px; color: var(--muted); font-weight: 700; }
+.lb-score-badge {
+  font-size: 17px; font-weight: 900;
+  background: var(--amber-l);
+  color: var(--amber-d);
+  padding: 5px 12px;
+  border-radius: 99px;
+  font-family: var(--mono);
+}
+.lb-empty { text-align: center; padding: 36px; color: var(--muted); font-weight: 700; font-size: 15px; }
+.lb-clear-btn {
+  display: block; margin: 18px auto 0;
+  padding: 9px 22px;
+  font-size: 13px; font-weight: 800;
+  font-family: var(--font);
+  border-radius: 99px;
+  border: 2px solid var(--red-l);
+  background: var(--red-l);
+  color: var(--red-d);
+  cursor: pointer;
+}
+
+/* ── NAME MODAL ── */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0; right: 0; bottom: 0; left: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 999;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  backdrop-filter: blur(4px);
+}
+.modal-overlay.open { display: flex; }
+.modal-box {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 30px 24px;
+  max-width: 360px;
+  width: 100%;
+  text-align: center;
+  animation: popIn 0.35s cubic-bezier(0.34,1.56,0.64,1);
+}
+.modal-box h3 { font-size: 21px; font-weight: 900; margin-bottom: 5px; }
+.modal-box p  { font-size: 13px; color: var(--muted); font-weight: 700; margin-bottom: 18px; }
+.modal-input {
+  width: 100%; height: 50px;
+  font-size: 17px; font-weight: 800;
+  font-family: var(--font);
+  text-align: center;
+  border-radius: 13px;
+  border: 3px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  outline: none;
+  margin-bottom: 12px;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.modal-input:focus { border-color: var(--blue); }
+.modal-save {
+  width: 100%;
+  padding: 13px;
+  font-size: 16px; font-weight: 900;
+  font-family: var(--font);
+  border-radius: 13px;
+  border: 3px solid var(--green-d);
+  background: var(--green);
+  color: #fff;
+  cursor: pointer;
+}
+
+/* ── CONFETTI ── */
+#confetti-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 998;
+}
+
+/* ── TOAST ── */
+.toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--text);
+  color: #fff;
+  padding: 10px 22px;
+  border-radius: 99px;
+  font-size: 14px;
+  font-weight: 800;
+  z-index: 997;
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  white-space: nowrap;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+.site-footer {
+  max-width: 660px;
+  margin: -36px auto 30px;
+  padding: 0 16px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* ── ONBOARDING SCREEN ── */
+#screen-onboarding {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 70vh;
+  text-align: center;
+  padding: 24px 16px;
+}
+.onboard-card {
+  background: var(--card);
+  border-radius: 28px;
+  border: 3px solid var(--border);
+  padding: 36px 32px;
+  max-width: 480px;
+  width: 100%;
+  box-shadow: var(--shadow);
+}
+.onboard-icon { font-size: 64px; margin-bottom: 12px; display: block; animation: floaty 2.6s ease-in-out infinite; }
+.onboard-title { font-size: 32px; font-weight: 950; margin-bottom: 8px; }
+.onboard-sub { font-size: 15px; color: var(--muted); font-weight: 700; margin-bottom: 28px; line-height: 1.5; }
+.onboard-age-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+.onboard-age-btn {
+  padding: 18px 12px;
+  border-radius: 18px;
+  border: 3px solid var(--border);
+  background: var(--card);
+  cursor: pointer;
+  font-family: var(--font);
+  transition: all 0.2s;
+  text-align: center;
+}
+.onboard-age-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.onboard-age-btn .ob-emoji { font-size: 36px; display: block; margin-bottom: 8px; }
+.onboard-age-btn strong { display: block; font-size: 18px; font-weight: 950; margin-bottom: 4px; }
+.onboard-age-btn span { font-size: 12px; font-weight: 700; color: var(--muted); }
+.onboard-age-btn[data-age="junior"] { border-color: #6ee7b7; background: var(--green-l); }
+.onboard-age-btn[data-age="junior"] strong { color: var(--green-d); }
+.onboard-age-btn[data-age="senior"] { border-color: #c4b5fd; background: var(--purple-l); }
+.onboard-age-btn[data-age="senior"] strong { color: var(--purple-d); }
+.onboard-privacy { font-size: 11px; color: var(--muted); font-weight: 700; margin-top: 14px; }
+.onboard-privacy a { color: var(--blue); text-decoration: underline; cursor: pointer; }
+
+/* ── SESSION PROGRESS PANEL ── */
+.session-progress {
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-radius: 18px;
+  padding: 14px 16px;
+  margin-bottom: 0;
+  box-shadow: var(--shadow-soft);
+}
+.session-progress h4 { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-bottom: 10px; }
+.sp-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.sp-stat { text-align: center; background: var(--bg); border-radius: 10px; padding: 8px 4px; }
+.sp-val { font-size: 20px; font-weight: 950; font-family: var(--mono); color: var(--text); }
+.sp-label { font-size: 9px; font-weight: 800; text-transform: uppercase; color: var(--muted); letter-spacing: 0.05em; }
+.sp-acc-bar-wrap { margin-top: 8px; background: var(--border); border-radius: 99px; height: 6px; overflow: hidden; }
+.sp-acc-bar { height: 100%; border-radius: 99px; background: var(--green); transition: width 0.5s ease; }
+
+/* ── ADAPTIVE DIFFICULTY NUDGE ── */
+.diff-nudge {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  background: var(--amber-l);
+  border: 2px solid #fcd34d;
+  border-radius: 14px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  animation: fadeIn 0.4s ease;
+}
+.diff-nudge.show { display: flex; }
+.diff-nudge span { flex: 1; font-size: 13px; font-weight: 800; color: var(--amber-d); }
+.diff-nudge button { font-size: 12px; font-weight: 900; font-family: var(--font); padding: 6px 12px; border-radius: 99px; border: 2px solid var(--amber-d); background: var(--amber); color: #fff; cursor: pointer; white-space: nowrap; }
+
+/* ── CONTEXTUAL SUGGESTION BANNER ── */
+.ctx-suggest {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  background: var(--purple-l);
+  border: 2px solid #c4b5fd;
+  border-radius: 14px;
+  padding: 10px 14px;
+  margin-top: 10px;
+  animation: fadeIn 0.4s ease;
+}
+.ctx-suggest.show { display: flex; }
+.ctx-suggest span { flex: 1; font-size: 13px; font-weight: 800; color: var(--purple-d); }
+.ctx-suggest button { font-size: 12px; font-weight: 900; font-family: var(--font); padding: 6px 12px; border-radius: 99px; border: 2px solid var(--purple-d); background: var(--purple); color: #fff; cursor: pointer; white-space: nowrap; }
+
+/* ── MISSED QUESTIONS REVIEW ── */
+.missed-wrap {
+  background: var(--bg);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  text-align: left;
+}
+.missed-wrap h4 { font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-bottom: 10px; }
+.missed-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: var(--red-l);
+  border: 1.5px solid #fca5a5;
+  margin-bottom: 6px;
+}
+.missed-item:last-child { margin-bottom: 0; }
+.missed-q { flex: 1; font-size: 14px; font-weight: 800; font-family: var(--mono); color: var(--text); }
+.missed-ans { font-size: 13px; font-weight: 900; color: var(--green-d); background: var(--green-l); padding: 3px 10px; border-radius: 99px; white-space: nowrap; }
+
+/* ── CONFIRM MODAL ── */
+#confirm-modal .modal-box { text-align: center; }
+#confirm-modal .modal-box h3 { margin-bottom: 8px; }
+#confirm-modal .modal-box p { color: var(--muted); font-size: 14px; font-weight: 700; margin-bottom: 20px; }
+.confirm-btn-row { display: flex; gap: 10px; justify-content: center; }
+.confirm-btn-row .btn-danger {
+  padding: 12px 22px; font-size: 14px; font-weight: 900; font-family: var(--font);
+  border-radius: 12px; border: 3px solid var(--red-d); background: var(--red); color: #fff; cursor: pointer;
+}
+.confirm-btn-row .btn-cancel {
+  padding: 12px 22px; font-size: 14px; font-weight: 900; font-family: var(--font);
+  border-radius: 12px; border: 3px solid var(--border); background: var(--card); color: var(--text); cursor: pointer;
+}
+
+/* ── PRIVACY MODAL ── */
+#privacy-modal .modal-box { max-width: 520px; text-align: left; max-height: 80vh; overflow-y: auto; }
+#privacy-modal h3 { text-align: center; margin-bottom: 14px; }
+.privacy-section { margin-bottom: 14px; }
+.privacy-section h4 { font-size: 13px; font-weight: 900; color: var(--text); margin-bottom: 5px; }
+.privacy-section p { font-size: 13px; font-weight: 700; color: var(--muted); line-height: 1.55; }
+.privacy-close {
+  display: block; width: 100%; margin-top: 18px;
+  padding: 13px; font-size: 15px; font-weight: 900; font-family: var(--font);
+  border-radius: 13px; border: 3px solid var(--blue-d); background: var(--blue); color: #fff; cursor: pointer;
+}
+
+/* ── TIMER RING ── */
+.timer-ring-wrap {
+  display: none;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+.timer-ring-wrap.visible { display: flex; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 860px) {
+  main { max-width: 760px; }
+  #screen-game.active {
+    display: block;
+  }
+  .setup-panel {
+    position: static;
+  }
+  .age-selector {
+    grid-template-columns: 1fr 1fr;
+  }
+  .mode-banner {
+    display: flex;
+    overflow-x: auto;
+    padding-bottom: 3px;
+    scrollbar-width: none;
+  }
+  .mode-banner::-webkit-scrollbar { display: none; }
+  .mode-pill {
+    flex-shrink: 0;
+    min-width: 128px;
+  }
+  .op-selector {
+    grid-template-columns: repeat(auto-fit, minmax(108px, 1fr));
+  }
+  .control-section {
+    margin-bottom: 14px;
+  }
+  .play-controls {
+    grid-template-columns: 1fr;
+  }
+  .play-controls .control-section {
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 420px) {
+  nav { justify-content: center; }
+  .logo { width: 100%; text-align: center; }
+  .nav-tabs { justify-content: center; }
+  .nav-actions { width: 100%; justify-content: center; }
+  main { padding: 14px 12px 58px; }
+  .mission-hero { grid-template-columns: 1fr; padding: 12px; text-align: center; }
+  .mission-hero p { margin: 0 auto; }
+  .mission-orbit { width: 64px; height: 64px; margin: 0 auto; border-radius: 16px; }
+  .mission-orbit span { font-size: 30px; }
+  .age-selector { grid-template-columns: 1fr; }
+  .age-card { min-height: 0; }
+  .mode-pill { min-width: 118px; }
+  .q-text { font-size: 40px; }
+  .q-card.senior .q-text { font-size: 24px; }
+  .ans-btn { font-size: 20px; padding: 14px 8px; }
+  .op-btn { font-size: 11px; padding: 9px 3px; }
+  .stats-bar { grid-template-columns: repeat(3, 1fr); }
+  .stats-bar .timer-card { grid-column: span 1; }
+  .options-row { align-items: flex-start; }
+  .timer-toggle { margin-left: 0; }
+  .explorer-facts { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="confetti-canvas"></canvas>
+<div class="toast" id="toast"></div>
+
+<!-- Name Modal -->
+<div class="modal-overlay" id="name-modal">
+  <div class="modal-box">
+    <h3>Great job! 🏆</h3>
+    <p id="modal-score-text">Save your score to the leaderboard</p>
+    <input class="modal-input" id="modal-name-input" type="text" maxlength="16" placeholder="Your name..." autocomplete="off">
+    <button class="modal-save" id="modal-save-btn">Save score!</button>
+  </div>
+</div>
+
+<!-- Confirm Modal -->
+<div class="modal-overlay" id="confirm-modal">
+  <div class="modal-box">
+    <h3>Clear all scores? 🗑️</h3>
+    <p>This permanently deletes all leaderboard scores. This cannot be undone.</p>
+    <div class="confirm-btn-row">
+      <button class="btn-cancel" id="confirm-cancel-btn">Cancel</button>
+      <button class="btn-danger" id="confirm-ok-btn">Yes, clear</button>
+    </div>
+  </div>
+</div>
+
+<!-- Privacy Modal -->
+<div class="modal-overlay" id="privacy-modal">
+  <div class="modal-box">
+    <h3>🔒 Privacy Policy</h3>
+    <div class="privacy-section">
+      <h4>Who we are</h4>
+      <p>Math Adventure is developed by Suresh Thiagarajah. Designed for children aged 6–12 to practise maths skills.</p>
+    </div>
+    <div class="privacy-section">
+      <h4>Data we collect</h4>
+      <p>Math Adventure collects <strong>no personal data</strong>. The only information stored is your optional leaderboard name and score, saved locally on your device. This never leaves your device and is never sent to any server.</p>
+    </div>
+    <div class="privacy-section">
+      <h4>Children's privacy (COPPA / GDPR-K)</h4>
+      <p>We do not knowingly collect personal information from children under 13. No accounts, emails, or identifiable information are required. The leaderboard name is stored only on your device.</p>
+    </div>
+    <div class="privacy-section">
+      <h4>Advertising &amp; tracking</h4>
+      <p>Math Adventure contains no advertising, no in-app purchases, and no third-party tracking of any kind.</p>
+    </div>
+    <div class="privacy-section">
+      <h4>Data deletion</h4>
+      <p>Delete all stored scores at any time using "Clear all scores" on the Scores screen.</p>
+    </div>
+    <div class="privacy-section">
+      <h4>Contact</h4>
+      <p>Privacy questions: <strong>suresh@mathadventure.app</strong></p>
+    </div>
+    <button class="privacy-close" id="privacy-close-btn">Got it — close</button>
+  </div>
+</div>
+
+<!-- Age Switch Warning Modal -->
+<div class="modal-overlay" id="age-switch-modal">
+  <div class="modal-box" style="text-align:center">
+    <h3 id="age-switch-title">Switch age group?</h3>
+    <p id="age-switch-msg" style="color:var(--muted);font-size:14px;font-weight:700;margin-bottom:20px">This will change your maths topics and start a new game.</p>
+    <div class="confirm-btn-row">
+      <button class="btn-cancel" id="age-switch-cancel-btn">Stay here</button>
+      <button class="btn-primary" id="age-switch-ok-btn">Yes, switch</button>
+    </div>
+  </div>
+</div>
+
+<nav>
+  <div class="logo">Math <span>Adventure!</span><small>+Academic</small></div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" data-screen="game">Play</button>
+    <button class="nav-tab" data-screen="tables">× Tables</button>
+    <button class="nav-tab" data-screen="explorer">Explore</button>
+    <button class="nav-tab" data-screen="leaderboard">Scores</button>
+  </div>
+  <div class="nav-actions">
+    <button class="sound-btn" id="sound-toggle" aria-label="Turn sound off" aria-pressed="true" title="Sound on">🔊</button>
+    <div class="hiscore">Best: <b id="nav-hiscore">0</b></div>
+  </div>
+</nav>
+
+<main>
+
+  <!-- ══ ONBOARDING SCREEN ══ -->
+  <div class="screen active" id="screen-onboarding">
+    <div class="onboard-card">
+      <span class="onboard-icon">🧮</span>
+      <div class="onboard-title">Math Adventure!</div>
+      <div class="onboard-sub">Practise maths, earn stars, climb the leaderboard. First — who's playing?</div>
+      <div class="onboard-age-grid">
+        <button class="onboard-age-btn" data-age="junior" aria-label="Select Ages 6 to 9">
+          <span class="ob-emoji">🌱</span>
+          <strong>Ages 6–9</strong>
+          <span>Addition, subtraction, times tables &amp; division</span>
+        </button>
+        <button class="onboard-age-btn" data-age="senior" aria-label="Select Ages 10 to 12">
+          <span class="ob-emoji">🚀</span>
+          <strong>Ages 10–12</strong>
+          <span>Fractions, decimals, geometry &amp; patterns</span>
+        </button>
+      </div>
+      <div class="onboard-privacy">By playing you agree to our <a id="onboard-privacy-link">Privacy Policy</a>. No personal data is collected.</div>
+    </div>
+  </div>
+
+  <!-- ══ GAME SCREEN ══ -->
+  <div class="screen" id="screen-game">
+
+    <section class="mission-hero" aria-label="Math Adventure welcome">
+      <div>
+        <div class="mission-kicker">Choose your challenge</div>
+        <h1>Ready for a maths mission?</h1>
+        <p>Pick an age path, choose a topic, then collect points, combo boosts, and reward stars as you solve each challenge.</p>
+      </div>
+      <div class="mission-orbit" aria-hidden="true"><span>🧮</span></div>
+    </section>
+
+    <div class="setup-panel">
+    <div class="control-section">
+      <div class="section-label"><b>1</b> Choose your age path</div>
+      <div class="age-selector">
+        <button class="age-card active" data-age="junior">
+          <strong>Ages 6-9</strong>
+          <span>Number facts, operations, tables, quick confidence building</span>
+        </button>
+        <button class="age-card" data-age="senior">
+          <strong>Ages 10-12</strong>
+          <span>Year 4-6 missions: fractions, decimals, geometry, patterns</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Session Progress Panel -->
+    <div class="session-progress">
+      <h4>📊 Your progress this session</h4>
+      <div class="sp-grid">
+        <div class="sp-stat"><div class="sp-val" id="sp-total">0</div><div class="sp-label">Answered</div></div>
+        <div class="sp-stat"><div class="sp-val" id="sp-correct">0</div><div class="sp-label">Correct</div></div>
+        <div class="sp-stat"><div class="sp-val" id="sp-acc">—</div><div class="sp-label">Accuracy</div></div>
+      </div>
+      <div class="sp-acc-bar-wrap"><div class="sp-acc-bar" id="sp-acc-bar" style="width:0%"></div></div>
+    </div>
+
+    </div>
+
+    <div class="play-panel">
+    <!-- Adaptive difficulty nudge -->
+    <div class="diff-nudge" id="diff-nudge">
+      <span id="diff-nudge-msg">🌟 You're crushing it!</span>
+      <button id="diff-nudge-btn">Level up →</button>
+    </div>
+    <div class="play-controls">
+      <!-- Game Mode Pills -->
+      <div class="control-section">
+        <div class="section-label"><b>2</b> Pick how to play</div>
+        <div class="mode-banner">
+          <button class="mode-pill active" data-mode="classic">🎯 Classic<br><small style="font-size:10px;font-weight:700;opacity:0.8">4 choices</small></button>
+          <button class="mode-pill" data-mode="type">⌨️ Type It<br><small style="font-size:10px;font-weight:700;opacity:0.8">no hints</small></button>
+          <button class="mode-pill" data-mode="missing">❓ Missing<br><small style="font-size:10px;font-weight:700;opacity:0.8">find the gap</small></button>
+          <button class="mode-pill" data-mode="speedrun">⚡ Speed Run<br><small style="font-size:10px;font-weight:700;opacity:0.8">60 seconds</small></button>
+        </div>
+      </div>
+
+      <div class="control-section">
+        <div class="section-label"><b>3</b> Choose your maths skill</div>
+        <div class="op-selector">
+          <button class="op-btn active" data-op="add">+ Add</button>
+          <button class="op-btn" data-op="sub">− Sub</button>
+          <button class="op-btn" data-op="mul">× Times</button>
+          <button class="op-btn" data-op="div">÷ Divide</button>
+          <button class="op-btn" data-op="mixed">⚡ Mix</button>
+        </div>
+      </div>
+
+      <div class="options-row">
+        <span class="opt-label">Level:</span>
+        <div class="opt-group">
+          <button class="opt-chip active" data-level="0">Easy</button>
+          <button class="opt-chip" data-level="1">Medium</button>
+          <button class="opt-chip" data-level="2">Hard</button>
+          <button class="opt-chip" data-level="3">Expert</button>
+        </div>
+        <label class="timer-toggle">
+          <button class="toggle-switch" id="timer-toggle" aria-label="Toggle timer"></button>
+          Timer
+        </label>
+      </div>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat-card score-card">
+        <div class="s-label">Score</div>
+        <div class="s-val" id="g-score">0</div>
+      </div>
+      <div class="stat-card streak-card">
+        <div class="s-label">Streak</div>
+        <div class="s-val" id="g-streak">0</div>
+      </div>
+      <div class="stat-card mult-card">
+        <div class="s-label">Combo</div>
+        <div class="s-val" id="g-mult">×1</div>
+      </div>
+      <div class="stat-card">
+        <div class="s-label">Q</div>
+        <div class="s-val" id="g-qnum">1/10</div>
+      </div>
+      <div class="stat-card timer-card" id="timer-card">
+        <div class="s-label">Time</div>
+        <div class="s-val" id="g-timer">—</div>
+      </div>
+    </div>
+
+    <div class="prog-wrap">
+      <div class="prog-fill" id="prog-fill" style="width:0%"></div>
+    </div>
+
+    <!-- Visual timer ring (shown when timer is on) -->
+    <div class="timer-ring-wrap" id="timer-ring-wrap">
+      <svg width="72" height="72" viewBox="0 0 72 72" aria-hidden="true">
+        <circle class="timer-ring-bg" cx="36" cy="36" r="30"/>
+        <circle class="timer-ring-arc" id="timer-ring-arc" cx="36" cy="36" r="30"
+          stroke-dasharray="188.5" stroke-dashoffset="0"/>
+        <text class="timer-ring-text" id="timer-ring-text" x="36" y="36">—</text>
+      </svg>
+    </div>
+
+    <div id="game-play">
+      <div class="q-card" id="q-card">
+        <div class="combo-badge" id="combo-badge">🔥 ×3</div>
+        <span class="q-icon" id="q-icon">🌟</span>
+        <div class="q-text" id="q-text">Loading...</div>
+        <!-- answer area swapped by mode -->
+        <div id="answer-area"></div>
+      </div>
+
+      <!-- number insight strip -->
+      <div class="num-insight" id="num-insight"></div>
+
+      <div class="feedback-text" id="feedback"></div>
+      <div id="solution-area"></div>
+
+      <!-- Contextual suggestion (e.g. go to Times Tables after a multiplication game) -->
+      <div class="ctx-suggest" id="ctx-suggest">
+        <span id="ctx-suggest-msg">Want to practise your times tables?</span>
+        <button id="ctx-suggest-btn">Go there →</button>
+      </div>
+
+      <button class="next-btn" id="next-btn" disabled>Next →</button>
+    </div>
+
+    <div id="game-results" style="display:none">
+      <div class="results-card">
+        <span class="results-emoji" id="r-emoji">🏆</span>
+        <div class="results-title" id="r-title">Amazing!</div>
+        <div class="results-sub"   id="r-sub">You scored 0 points</div>
+        <div class="results-stars" id="r-stars"></div>
+        <div class="reward-line" id="r-reward">⭐ 0 reward stars collected</div>
+        <div class="results-grid">
+          <div class="r-stat"><div class="rv" id="r-correct">0</div><div class="rl">Correct</div></div>
+          <div class="r-stat"><div class="rv" id="r-score2">0</div><div class="rl">Score</div></div>
+          <div class="r-stat"><div class="rv" id="r-best-streak">0</div><div class="rl">Best streak</div></div>
+        </div>
+        <div class="op-breakdown" id="op-breakdown" style="display:none">
+          <h4>Accuracy by operation</h4>
+          <div id="op-breakdown-rows"></div>
+        </div>
+        <!-- Missed questions review -->
+        <div class="missed-wrap" id="missed-wrap" style="display:none">
+          <h4>📝 Questions to review</h4>
+          <div id="missed-list"></div>
+        </div>
+        <div class="btn-row">
+          <button class="btn-primary" id="play-again-btn">Play again</button>
+          <button class="btn-secondary" id="save-score-btn">Save score</button>
+        </div>
+      </div>
+    </div>
+    </div>
+
+  </div>
+
+  <!-- ══ TIMES TABLES SCREEN ══ -->
+  <div class="screen" id="screen-tables">
+
+    <div class="tt-controls">
+      <span class="tt-label">Show table:</span>
+      <div id="tt-num-btns"></div>
+    </div>
+
+    <div class="tt-legend">
+      <div class="tt-legend-item"><div class="tt-legend-dot" style="background:var(--rose)"></div> prime</div>
+      <div class="tt-legend-item"><div class="tt-legend-dot" style="background:var(--amber)"></div> perfect square</div>
+      <div class="tt-legend-item"><div class="tt-legend-dot" style="background:var(--purple)"></div> selected row/col</div>
+    </div>
+
+    <div class="tt-grid-wrap">
+      <div class="tt-grid" id="tt-grid"></div>
+    </div>
+
+    <div class="tt-quiz-wrap">
+      <div class="tt-quiz-title">Quick quiz — can you answer this?</div>
+      <div class="tt-quiz-q" id="tt-q">? × ? = ?</div>
+      <div class="tt-quiz-input-row">
+        <input class="tt-quiz-input" id="tt-input" type="tel" inputmode="numeric" pattern="[0-9]*" placeholder="?">
+        <button class="tt-submit" id="tt-submit-btn">Check</button>
+      </div>
+      <div class="tt-feedback" id="tt-feedback"></div>
+      <div class="tt-streak-bar" id="tt-streak-bar"></div>
+    </div>
+
+  </div>
+
+  <!-- ══ NUMBER EXPLORER SCREEN ══ -->
+  <div class="screen" id="screen-explorer">
+    <div class="explorer-wrap">
+      <div class="explorer-title">🔬 Number Explorer</div>
+      <div class="explorer-input-row">
+        <input class="explorer-input" id="explorer-input" type="tel" inputmode="numeric" pattern="[0-9]*" placeholder="Enter any number" max="99999" min="1">
+        <button class="explorer-go" id="explorer-go">Explore!</button>
+      </div>
+      <div id="explorer-facts">
+        <div class="explorer-placeholder">Enter a number above to discover its mathematical properties ✨</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ LEADERBOARD SCREEN ══ -->
+  <div class="screen" id="screen-leaderboard">
+    <div class="lb-header">
+      <h2>Hall of Fame 🏅</h2>
+      <p>Top scores from all players</p>
+    </div>
+    <div class="lb-list" id="lb-list"></div>
+    <button class="lb-clear-btn" id="lb-clear-btn">Clear all scores</button>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  Copyright © 2026 Suresh Thiagarajah. All rights reserved. &nbsp;·&nbsp; <a id="footer-privacy-link" style="color:var(--blue);text-decoration:underline;cursor:pointer">Privacy Policy</a>
+</footer>
+
+<script>
+/* ═══════════════════════════════════════════
+   LEVELS — extended with Expert
+═══════════════════════════════════════════ */
+const LEVELS = [
+  { label: 'Easy',   maxA: 10,  maxB: 10,  timerSecs: 20 },
+  { label: 'Medium', maxA: 20,  maxB: 10,  timerSecs: 15 },
+  { label: 'Hard',   maxA: 50,  maxB: 20,  timerSecs: 12 },
+  { label: 'Expert', maxA: 100, maxB: 50,  timerSecs: 8  }
+];
+
+const ICONS = {
+  add: ['🍎','🐶','🌟','🍕','🦋','🍊','🐸','🎈'],
+  sub: ['🍓','🐱','🌈','🍦','🦄','🌸','🐠','🎀'],
+  mul: ['🍌','⭐','🎉','🦊','🍩','🎯','🚀','💎'],
+  div: ['🍇','🐼','💫','🦁','🏆','🎪','🌙','🎸'],
+  mixed: ['🧮','🔢','📐','🧠','⚡','🎲','🌀','🔮']
+};
+
+const ALL_OPS = ['add','sub','mul','div'];
+const JUNIOR_OPS = ['add','sub','mul','div'];
+const SENIOR_OPS = ['fractions','decimal','geometry','bodmas','number','data'];
+
+const OP_LABELS = {
+  add:'Addition', sub:'Subtraction', mul:'Multiplication', div:'Division', mixed:'Mixed',
+  fractions:'Fractions', decimal:'Decimals & Percent', geometry:'Measurement & Geometry',
+  bodmas:'Order of Operations', number:'Factors & Patterns', data:'Data & Chance'
+};
+
+const OP_NAMES = {
+  add:'+ Addition', sub:'− Subtraction', mul:'× Multiplication', div:'÷ Division',
+  fractions:'Fractions', decimal:'Decimals & Percent', geometry:'Measurement & Geometry',
+  bodmas:'Order of Operations', number:'Factors & Patterns', data:'Data & Chance'
+};
+
+const CORRECT_MSGS = [
+  'Brilliant! Star collected! 🌟','Awesome move! 🎉','You got it! ✨','Superstar thinking! 🚀',
+  'Perfect! Keep climbing! 💯','Yes! Your brain is warming up! 💪','Incredible! 🔥','Spot on! 👏',
+  'Math power unlocked! 🧮','Clever strategy! 🧠','Flawless! 💎'
+];
+
+const STREAK_MSGS = {
+  3: '🔥 On fire! 3 in a row!',
+  5: '💫 Incredible! 5 streak!',
+  7: '🚀 Unstoppable! ×3 multiplier!',
+  10: '🏆 LEGENDARY! 10 streak!'
+};
+
+let state = {
+  ageGroup: 'junior',
+  op: 'add',
+  level: 0,
+  mode: 'classic',
+  timerOn: false,
+  score: 0,
+  streak: 0,
+  bestStreak: 0,
+  correct: 0,
+  qIndex: 0,
+  totalQ: 10,
+  answered: false,
+  correctAns: 0,
+  displayAns: 0,
+  timerInterval: null,
+  timeLeft: 20,
+  pendingScore: 0,
+  pendingMeta: '',
+  rewardStars: 0,
+  soundOn: true,
+  // speedrun
+  speedrunScore: 0,
+  speedrunTotal: 0,
+  speedrunInterval: null,
+  speedrunTimeLeft: 60,
+  speedrunActive: false,
+  // per-op tracking (for mixed mode results)
+  opStats: { add:{c:0,t:0}, sub:{c:0,t:0}, mul:{c:0,t:0}, div:{c:0,t:0}, fractions:{c:0,t:0}, decimal:{c:0,t:0}, geometry:{c:0,t:0}, bodmas:{c:0,t:0}, number:{c:0,t:0}, data:{c:0,t:0} },
+  currentOp: 'add',
+  seenQuestions: new Set(),
+  // session-wide stats (persist across games until page reload)
+  sessionTotal: 0,
+  sessionCorrect: 0,
+  // missed questions log for current game
+  missedQuestions: []
+};
+
+let ttSelectedNum = 1;
+let ttCorrectAns = 0;
+let ttStreak = 0;
+let ttSeenQuestions = new Set();
+
+/* ═══════════════════════════════════════════
+   UTILS
+═══════════════════════════════════════════ */
+function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
+function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+function roundTo(n, places = 2) { return Number(Number(n).toFixed(places)); }
+function formatAnswer(n) {
+  return Number.isInteger(n) ? String(n) : String(roundTo(n, 2)).replace(/\.0+$/, '');
+}
+function answersMatch(chosen, correct) {
+  const a = Number(chosen);
+  const b = Number(correct);
+  return Number.isFinite(a) && Number.isFinite(b) && Math.abs(a - b) < 0.01;
+}
+function getActiveOps() {
+  return state.ageGroup === 'senior' ? SENIOR_OPS : JUNIOR_OPS;
+}
+function makeFreshOpStats() {
+  return { add:{c:0,t:0}, sub:{c:0,t:0}, mul:{c:0,t:0}, div:{c:0,t:0}, fractions:{c:0,t:0}, decimal:{c:0,t:0}, geometry:{c:0,t:0}, bodmas:{c:0,t:0}, number:{c:0,t:0}, data:{c:0,t:0} };
+}
+
+/* ── AUDIO ── */
+let _audioCtx = null;
+function getAudioCtx() {
+  if (!_audioCtx) {
+    try { _audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {}
+  }
+  return _audioCtx;
+}
+function unlockAudio() {
+  getAudioCtx();
+  document.removeEventListener('touchstart', unlockAudio);
+  document.removeEventListener('click', unlockAudio);
+}
+document.addEventListener('touchstart', unlockAudio, { passive: true });
+document.addEventListener('click', unlockAudio, { passive: true });
+
+function playTone(freq, dur, type = 'sine', vol = 0.18) {
+  try {
+    if (!state.soundOn) return;
+    const ctx = getAudioCtx();
+    if (!ctx) return;
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.frequency.value = freq;
+    o.type = type;
+    g.gain.setValueAtTime(vol, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
+    o.start(ctx.currentTime);
+    o.stop(ctx.currentTime + dur);
+  } catch(e) {}
+}
+
+function buzz(pattern) {
+  if (!state.soundOn || !navigator.vibrate) return;
+  try { navigator.vibrate(pattern); } catch(e) {}
+}
+
+function playCorrect() {
+  buzz(22);
+  playTone(523,0.08); setTimeout(()=>playTone(659,0.08),90); setTimeout(()=>playTone(784,0.15),180);
+}
+function playWrong() { buzz([35, 30, 35]); playTone(220, 0.35, 'sawtooth', 0.12); }
+function playTick()  { playTone(880, 0.05, 'square', 0.1); }
+function playCombo() {
+  buzz([18, 20, 18]);
+  playTone(784,0.07); setTimeout(()=>playTone(1046,0.07),70); setTimeout(()=>playTone(1318,0.12),140);
+}
+function playLevelUp() {
+  buzz([20, 25, 20, 25, 40]);
+  [523,659,784,1046].forEach((f,i) => setTimeout(()=>playTone(f,0.12),i*80));
+}
+
+/* ── TOAST ── */
+function showToast(msg, dur = 2000) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), dur);
+}
+
+function updateSoundButton() {
+  const btn = document.getElementById('sound-toggle');
+  if (!btn) return;
+  btn.textContent = state.soundOn ? '🔊' : '🔇';
+  btn.title = state.soundOn ? 'Sound on' : 'Sound off';
+  btn.setAttribute('aria-label', state.soundOn ? 'Turn sound off' : 'Turn sound on');
+  btn.setAttribute('aria-pressed', String(state.soundOn));
+}
+
+/* ═══════════════════════════════════════════
+   NUMBER MATHS PROPERTIES
+═══════════════════════════════════════════ */
+function isPrime(n) {
+  if (n < 2) return false;
+  if (n === 2) return true;
+  if (n % 2 === 0) return false;
+  for (let i = 3; i <= Math.sqrt(n); i += 2) if (n % i === 0) return false;
+  return true;
+}
+function isPerfectSquare(n) {
+  const s = Math.round(Math.sqrt(n));
+  return s * s === n && n > 0;
+}
+const FIB = new Set([1,2,3,5,8,13,21,34,55,89,144]);
+function isFib(n) { return FIB.has(n); }
+
+function getInsights(n) {
+  const tags = [];
+  if (n < 2) return tags;
+  if (isPrime(n))        tags.push({ cls: 'prime',   label: '🔴 Prime' });
+  if (isPerfectSquare(n)) tags.push({ cls: 'square',  label: `⬛ Perfect Square (${Math.round(Math.sqrt(n))}²)` });
+  if (isFib(n))          tags.push({ cls: 'fib',     label: '🌀 Fibonacci' });
+  if (n % 2 === 0)        tags.push({ cls: 'even',    label: '✌ Even' });
+  else                    tags.push({ cls: 'odd',     label: '☝ Odd' });
+  return tags;
+}
+
+function showInsights(n) {
+  const wrap = document.getElementById('num-insight');
+  wrap.innerHTML = '';
+  if (!Number.isInteger(Number(n))) return;
+  const insights = getInsights(n);
+  insights.forEach(ins => {
+    const tag = document.createElement('span');
+    tag.className = 'insight-tag ' + ins.cls;
+    tag.textContent = ins.label;
+    wrap.appendChild(tag);
+  });
+}
+
+/* ═══════════════════════════════════════════
+   COMBO MULTIPLIER
+═══════════════════════════════════════════ */
+function getMultiplier() {
+  if (state.streak >= 7) return 3;
+  if (state.streak >= 4) return 2;
+  return 1;
+}
+function updateComboDisplay() {
+  const mult = getMultiplier();
+  const el = document.getElementById('g-mult');
+  const badge = document.getElementById('combo-badge');
+  el.textContent = `×${mult}`;
+  if (mult >= 3) {
+    badge.textContent = '🔥 ×3 COMBO!';
+    badge.className = 'combo-badge show x3';
+  } else if (mult >= 2) {
+    badge.textContent = '⚡ ×2 COMBO';
+    badge.className = 'combo-badge show x2';
+  } else {
+    badge.className = 'combo-badge';
+  }
+  el.classList.remove('mult-glow');
+  void el.offsetWidth;
+  if (mult > 1) el.classList.add('mult-glow');
+}
+
+/* ═══════════════════════════════════════════
+   LOCAL STORAGE
+═══════════════════════════════════════════ */
+function getScores() {
+  try { const r = localStorage.getItem('mathAdventureScoresV2'); return r ? JSON.parse(r) : []; } catch(e) { return []; }
+}
+function safeSave(arr) {
+  try { localStorage.setItem('mathAdventureScoresV2', JSON.stringify(arr)); } catch(e) {}
+}
+function saveScore(name, score, meta) {
+  const scores = getScores();
+  scores.push({ name, score, meta, date: new Date().toLocaleDateString() });
+  scores.sort((a,b) => b.score - a.score);
+  safeSave(scores.slice(0, 20));
+  renderLeaderboard();
+  updateNavHiscore();
+}
+function getHiscore() { const s = getScores(); return s.length ? s[0].score : 0; }
+function updateNavHiscore() { document.getElementById('nav-hiscore').textContent = getHiscore(); }
+
+/* ═══════════════════════════════════════════
+   SCREEN ROUTING
+═══════════════════════════════════════════ */
+document.querySelectorAll('.nav-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    switchScreen(tab.dataset.screen);
+  });
+});
+
+/* ═══════════════════════════════════════════
+   QUESTION GENERATION
+═══════════════════════════════════════════ */
+function genQuestion(forcedOp) {
+  const lv = LEVELS[state.level];
+  let a, b, ans, display, op = forcedOp || state.op;
+
+  if (state.op === 'mixed') op = pick(getActiveOps());
+  state.currentOp = op;
+
+  if (state.mode === 'missing' && state.ageGroup === 'senior') {
+    return genSeniorQuestion(op, lv);
+  }
+
+  if (state.mode === 'missing') {
+    // Missing number: ?  op  b = ans  OR  a  op  ? = ans
+    return genMissingQuestion(op, lv);
+  }
+
+  if (state.ageGroup === 'senior') {
+    return genSeniorQuestion(op, lv);
+  }
+
+  if (op === 'add') {
+    a = rand(1, lv.maxA); b = rand(1, lv.maxB);
+    ans = a + b; display = `${a} + ${b} = ?`;
+  } else if (op === 'sub') {
+    a = rand(2, lv.maxA); b = rand(1, Math.min(a-1, lv.maxB));
+    ans = a - b; display = `${a} − ${b} = ?`;
+  } else if (op === 'mul') {
+    a = rand(1, Math.min(lv.maxA, 12)); b = rand(1, Math.min(lv.maxB, 12));
+    ans = a * b; display = `${a} × ${b} = ?`;
+  } else {
+    b = rand(1, Math.min(lv.maxB, 12));
+    ans = rand(1, Math.min(lv.maxA, 12));
+    a = ans * b;
+    display = `${a} ÷ ${b} = ?`;
+  }
+  return { display, ans, op, a, b };
+}
+
+function genSeniorQuestion(op, lv) {
+  const band = state.level;
+  let a, b, c, d, ans, display, solution;
+
+  if (op === 'fractions') {
+    const denominators = band <= 1 ? [2,3,4,5,6,8,10] : [3,4,5,6,8,10,12];
+    b = pick(denominators);
+    d = Math.random() < 0.65 ? b : pick(denominators.filter(n => n !== b && (n % b === 0 || b % n === 0)));
+    a = rand(1, b - 1);
+    c = rand(1, d - 1);
+    if (band <= 1 || b === d || Math.random() < 0.5) {
+      d = b;
+      ans = roundTo((a + c) / b, 2);
+      display = `${a}/${b} + ${c}/${d} = ?`;
+      solution = `Same denominator: ${a}/${b} + ${c}/${b} = ${a + c}/${b} = ${formatAnswer(ans)}`;
+    } else {
+      const common = b * d;
+      ans = roundTo((a * d + c * b) / common, 2);
+      display = `${a}/${b} + ${c}/${d} = ? (decimal)`;
+      solution = `Use common parts: ${a}/${b} + ${c}/${d} = ${(a*d + c*b)}/${common} = ${formatAnswer(ans)}`;
+    }
+  } else if (op === 'decimal') {
+    const type = band <= 1 ? pick(['addDec','money','percent']) : pick(['addDec','percent','convert']);
+    if (type === 'addDec') {
+      a = roundTo(rand(10, 120) / 10, 1);
+      b = roundTo(rand(5, 90) / 10, 1);
+      ans = roundTo(a + b, 1);
+      display = `${a} + ${b} = ?`;
+      solution = `Line up the decimal points: ${a} + ${b} = ${formatAnswer(ans)}`;
+    } else if (type === 'money') {
+      a = rand(120, 750) / 100;
+      b = rand(80, 500) / 100;
+      ans = roundTo(a + b, 2);
+      display = `$${a.toFixed(2)} + $${b.toFixed(2)} = ?`;
+      solution = `Add dollars and cents carefully: ${a.toFixed(2)} + ${b.toFixed(2)} = ${ans.toFixed(2)}`;
+    } else if (type === 'convert') {
+      a = pick([0.25,0.5,0.75,0.1,0.2,0.4,0.8,1.25]);
+      ans = roundTo(a * 100, 0);
+      display = `${a} as a percentage = ?`;
+      solution = `Multiply by 100: ${a} × 100 = ${ans}%`;
+    } else {
+      const pct = pick([10,20,25,50,75]);
+      const whole = pick([40,60,80,100,120,160,200]);
+      ans = roundTo(whole * pct / 100, 0);
+      display = `${pct}% of ${whole} = ?`;
+      solution = `${pct}% means ${pct}/100, so ${whole} × ${pct}/100 = ${ans}`;
+    }
+  } else if (op === 'geometry') {
+    const type = band <= 1 ? pick(['perimeter','area','angle']) : pick(['perimeter','area','volume','angle']);
+    if (type === 'perimeter') {
+      a = rand(4 + band, 16 + band * 4);
+      b = rand(3 + band, 12 + band * 3);
+      ans = 2 * (a + b);
+      display = `Rectangle ${a} cm by ${b} cm: perimeter?`;
+      solution = `Perimeter is all sides: 2 × (${a} + ${b}) = ${ans} cm`;
+    } else if (type === 'area') {
+      a = rand(4 + band, 18 + band * 4);
+      b = rand(3 + band, 12 + band * 3);
+      ans = a * b;
+      display = `Rectangle ${a} cm by ${b} cm: area?`;
+      solution = `Area = length × width: ${a} × ${b} = ${ans} cm²`;
+    } else if (type === 'volume') {
+      a = rand(3, 8 + band);
+      b = rand(2, 7 + band);
+      c = rand(2, 6 + band);
+      ans = a * b * c;
+      display = `Box ${a}×${b}×${c} cm: volume?`;
+      solution = `Volume = length × width × height: ${a} × ${b} × ${c} = ${ans} cm³`;
+    } else {
+      a = pick([25,30,35,40,45,50,55,60,65,70,75]);
+      b = pick([30,40,45,50,55,60,65,70]);
+      ans = 180 - a - b;
+      display = `Triangle angles ${a}° and ${b}°: missing angle?`;
+      solution = `Angles in a triangle add to 180°: 180 - ${a} - ${b} = ${ans}°`;
+    }
+  } else if (op === 'bodmas') {
+    a = rand(2, 12 + band * 4);
+    b = rand(2, 10 + band * 2);
+    c = rand(2, 9 + band);
+    if (Math.random() < 0.5) {
+      ans = a + b * c;
+      display = `${a} + ${b} × ${c} = ?`;
+      solution = `Multiply first: ${b} × ${c} = ${b*c}, then add ${a} = ${ans}`;
+    } else {
+      ans = (a + b) * c;
+      display = `(${a} + ${b}) × ${c} = ?`;
+      solution = `Brackets first: ${a} + ${b} = ${a+b}, then × ${c} = ${ans}`;
+    }
+  } else if (op === 'number') {
+    const type = pick(['factor','multiple','pattern']);
+    if (type === 'factor') {
+      const nums = band <= 1 ? [24,30,36,42,48,54,60] : [72,84,90,96,108,120,144];
+      a = pick(nums);
+      const factors = getFactors(a);
+      ans = factors.length;
+      display = `How many factors does ${a} have?`;
+      solution = `Factors of ${a}: ${factors.join(', ')}. There are ${ans}.`;
+    } else if (type === 'multiple') {
+      a = rand(4, 12 + band);
+      b = rand(5, 11 + band);
+      ans = a * b;
+      display = `The ${b}th multiple of ${a} = ?`;
+      solution = `Multiples are repeated groups: ${a} × ${b} = ${ans}`;
+    } else {
+      a = rand(3, 12);
+      b = rand(2, 9 + band);
+      c = rand(2, 8 + band);
+      const fourth = a + 3 * b;
+      ans = a + 4 * b;
+      display = `${a}, ${a+b}, ${a+2*b}, ${fourth}, ?`;
+      solution = `The pattern adds ${b} each time, so ${fourth} + ${b} = ${ans}`;
+    }
+  } else {
+    const type = pick(['mean','range','chance']);
+    if (type === 'mean') {
+      a = rand(3, 9);
+      b = rand(3, 9);
+      c = rand(3, 9);
+      d = rand(3, 9);
+      const total = a + b + c + d;
+      ans = roundTo(total / 4, 2);
+      display = `Mean of ${a}, ${b}, ${c}, ${d} = ?`;
+      solution = `Mean = total ÷ number of values: (${a}+${b}+${c}+${d}) ÷ 4 = ${formatAnswer(ans)}`;
+    } else if (type === 'range') {
+      const values = shuffle([rand(8, 30), rand(8, 30), rand(8, 30), rand(8, 30), rand(8, 30)]);
+      ans = Math.max(...values) - Math.min(...values);
+      display = `Range of ${values.join(', ')} = ?`;
+      solution = `Range = highest - lowest: ${Math.max(...values)} - ${Math.min(...values)} = ${ans}`;
+    } else {
+      const red = rand(1, 5 + band);
+      const blue = rand(1, 5 + band);
+      const total = red + blue;
+      ans = roundTo(red / total, 2);
+      display = `${red} red, ${blue} blue counters. Chance of red? (decimal)`;
+      solution = `Chance = favourable ÷ total: ${red} ÷ ${total} = ${formatAnswer(ans)}`;
+    }
+  }
+
+  return { display, ans, op, a, b, c, d, solution };
+}
+
+function genMissingQuestion(op, lv) {
+  let a, b, ans, display;
+  const missingA = Math.random() < 0.5;
+
+  if (op === 'add') {
+    a = rand(1, lv.maxA); b = rand(1, lv.maxB);
+    const total = a + b;
+    if (missingA) { ans = a; display = `? + ${b} = ${total}`; }
+    else           { ans = b; display = `${a} + ? = ${total}`; }
+  } else if (op === 'sub') {
+    a = rand(3, lv.maxA); b = rand(1, a-1);
+    const diff = a - b;
+    if (missingA) { ans = a; display = `? − ${b} = ${diff}`; }
+    else           { ans = b; display = `${a} − ? = ${diff}`; }
+  } else if (op === 'mul') {
+    a = rand(2, Math.min(lv.maxA, 12)); b = rand(2, Math.min(lv.maxB, 12));
+    const prod = a * b;
+    if (missingA) { ans = a; display = `? × ${b} = ${prod}`; }
+    else           { ans = b; display = `${a} × ? = ${prod}`; }
+  } else {
+    b = rand(2, Math.min(lv.maxB, 10));
+    const quotient = rand(2, Math.min(lv.maxA, 12));
+    a = quotient * b;
+    if (missingA) { ans = a; display = `? ÷ ${b} = ${quotient}`; }
+    else           { ans = b; display = `${a} ÷ ? = ${quotient}`; }
+  }
+  return { display, ans, op, a, b };
+}
+
+function genChoices(ans) {
+  const set = new Set([formatAnswer(ans)]);
+  let attempts = 0;
+  while (set.size < 4 && attempts < 60) {
+    attempts++;
+    const spread = Math.max(3, Math.floor(ans * 0.35));
+    const decimalAnswer = !Number.isInteger(Number(ans));
+    const delta = decimalAnswer ? rand(1, Math.max(3, spread)) / 10 : rand(1, spread);
+    const c = roundTo(Math.random() < 0.5 ? Number(ans) + delta : Math.max(0, Number(ans) - delta), decimalAnswer ? 2 : 0);
+    if (!answersMatch(c, ans) && c >= 0) set.add(formatAnswer(c));
+  }
+  return shuffle([...set]);
+}
+
+function buildSolution(q) {
+  const { op, a, b, ans } = q;
+  if (q.solution) return q.solution;
+  if (!a || !b) return null;
+  if (op === 'add') return `${a} + ${b} = ${ans}\nThink: start at ${a}, count up ${b}`;
+  if (op === 'sub') return `${a} − ${b} = ${ans}\nThink: ${a} minus ${b} steps back`;
+  if (op === 'mul') return `${a} × ${b} = ${ans}\n${a} groups of ${b}: ${Array.from({length:Math.min(a,6)},(_,i)=>(i+1)*b).join(', ')}${a>6?'…':''}`;
+  if (op === 'div') return `${a} ÷ ${b} = ${ans}\nCheck: ${ans} × ${b} = ${ans*b}`;
+  return null;
+}
+
+/* ═══════════════════════════════════════════
+   SPEEDRUN MODE
+═══════════════════════════════════════════ */
+function startSpeedRun() {
+  state.speedrunScore = 0;
+  state.speedrunTotal = 0;
+  state.speedrunActive = true;
+  state.speedrunTimeLeft = 60;
+
+  const progFill = document.getElementById('prog-fill');
+  progFill.className = 'speedrun-bar';
+  progFill.style.width = '100%';
+  document.getElementById('g-qnum').textContent = '60s';
+
+  state.speedrunInterval = setInterval(() => {
+    state.speedrunTimeLeft--;
+    document.getElementById('g-timer').textContent = state.speedrunTimeLeft + 's';
+    const pct = (state.speedrunTimeLeft / 60) * 100;
+    progFill.style.width = pct + '%';
+    if (state.speedrunTimeLeft <= 10) document.getElementById('timer-card').classList.add('warn');
+    if (state.speedrunTimeLeft <= 0) endSpeedRun();
+  }, 1000);
+}
+
+function endSpeedRun() {
+  clearInterval(state.speedrunInterval);
+  state.speedrunActive = false;
+  state.answered = true;
+  document.querySelectorAll('.ans-btn, .type-submit').forEach(b => b.disabled = true);
+
+  // Override totals for speedrun while preserving point bonuses.
+  state.correct = state.speedrunScore;
+  state.totalQ = state.speedrunTotal;
+  state.bestStreak = state.streak;
+  showResults();
+}
+
+/* ═══════════════════════════════════════════
+   MAIN GAME
+═══════════════════════════════════════════ */
+let currentQ = null;
+
+function loadQuestion() {
+  state.answered = false;
+  clearInterval(state.timerInterval);
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('solution-area').innerHTML = '';
+  document.getElementById('num-insight').innerHTML = '';
+  document.getElementById('next-btn').disabled = true;
+  document.getElementById('q-card').className = 'q-card' + (state.ageGroup === 'senior' ? ' senior' : '');
+  document.getElementById('combo-badge').className = 'combo-badge';
+
+  // Deduplicate questions within a session
+  let _att = 0;
+  do {
+    currentQ = genQuestion();
+    _att++;
+  } while (_att < 8 && state.seenQuestions.has(currentQ.display));
+  state.seenQuestions.add(currentQ.display);
+  state.correctAns = currentQ.ans;
+
+  const iconEl = document.getElementById('q-icon');
+  const icons = ICONS[state.op] || ICONS.add;
+  iconEl.textContent = icons[state.qIndex % icons.length];
+  iconEl.classList.remove('bounce');
+  setTimeout(() => iconEl.classList.add('bounce'), 0);
+
+  document.getElementById('q-text').textContent = currentQ.display;
+
+  if (state.mode !== 'speedrun') {
+    document.getElementById('g-qnum').textContent = `${state.qIndex + 1}/${state.totalQ}`;
+    document.getElementById('prog-fill').style.width = (state.qIndex / state.totalQ * 100) + '%';
+    document.getElementById('prog-fill').className = 'prog-fill';
+  }
+
+  updateComboDisplay();
+  buildAnswerArea();
+
+  if (state.timerOn && state.mode !== 'speedrun') {
+    startTimer();
+  } else if (state.mode !== 'speedrun') {
+    document.getElementById('g-timer').textContent = '—';
+    document.getElementById('timer-ring-wrap').classList.remove('visible');
+  }
+}
+
+function buildAnswerArea() {
+  const area = document.getElementById('answer-area');
+  area.innerHTML = '';
+
+  if (state.mode === 'type' || state.mode === 'missing') {
+    const wrap = document.createElement('div');
+    wrap.className = 'type-answer-wrap';
+    const inp = document.createElement('input');
+    inp.className = 'type-input';
+    inp.id = 'type-inp';
+    inp.type = 'text';
+    inp.inputMode = 'decimal';
+    inp.placeholder = '?';
+    inp.autocomplete = 'off';
+    const btn = document.createElement('button');
+    btn.className = 'type-submit';
+    btn.textContent = 'Submit ↵';
+    btn.addEventListener('click', () => handleTypeAnswer());
+    inp.addEventListener('keydown', e => { if (e.key === 'Enter') handleTypeAnswer(); });
+    wrap.appendChild(inp); wrap.appendChild(btn);
+    area.appendChild(wrap);
+    setTimeout(() => inp.focus(), 100);
+  } else {
+    // Classic: 4 choices
+    const grid = document.createElement('div');
+    grid.className = 'answers';
+    genChoices(state.correctAns).forEach((c, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'ans-btn';
+      btn.textContent = c;
+      btn.setAttribute('aria-label', `Answer choice ${i + 1}: ${c}`);
+      btn.addEventListener('click', () => handleAnswer(btn, c));
+      grid.appendChild(btn);
+    });
+    area.appendChild(grid);
+  }
+}
+
+function handleTypeAnswer() {
+  const inp = document.getElementById('type-inp');
+  if (!inp || state.answered) return;
+  const val = parseFloat(inp.value);
+  if (isNaN(val)) { inp.placeholder = 'Type a number!'; return; }
+  handleAnswerResult(answersMatch(val, state.correctAns), inp);
+}
+
+function handleAnswer(btn, chosen) {
+  if (state.answered) return;
+  handleAnswerResult(answersMatch(chosen, state.correctAns), btn, chosen);
+}
+
+function handleAnswerResult(isCorrect, el, chosen) {
+  if (state.answered) return;
+  state.answered = true;
+  clearInterval(state.timerInterval);
+
+  // disable all buttons / input
+  document.querySelectorAll('.ans-btn').forEach(b => b.disabled = true);
+  const typeInp = document.getElementById('type-inp');
+  if (typeInp) typeInp.disabled = true;
+  document.querySelectorAll('.type-submit').forEach(b => b.disabled = true);
+
+  // track op stats
+  const op = state.currentOp;
+  if (state.opStats[op]) {
+    state.opStats[op].t++;
+    if (isCorrect) state.opStats[op].c++;
+  }
+
+  // session-wide tracking
+  state.sessionTotal++;
+  if (isCorrect) state.sessionCorrect++;
+  if (!isCorrect && currentQ) {
+    state.missedQuestions.push({ q: currentQ.display, ans: formatAnswer(state.correctAns) });
+  }
+  updateSessionProgress();
+
+  if (isCorrect) {
+    if (el) el.classList.add('correct');
+    if (typeInp) typeInp.classList.add('correct');
+    document.getElementById('q-card').classList.add('correct-flash');
+
+    const mult = getMultiplier();
+    const timeBonus = state.timerOn ? Math.max(0, state.timeLeft) : 0;
+    const basePoints = 10;
+    const streakBonus = state.streak * 2;
+    const points = (basePoints + streakBonus + timeBonus) * mult;
+    const earnedStars = 1 + (state.streak >= 4 ? 1 : 0) + (state.streak >= 7 ? 1 : 0);
+
+    state.score += points;
+    state.rewardStars += earnedStars;
+    state.streak++;
+    state.bestStreak = Math.max(state.bestStreak, state.streak);
+    state.correct++;
+
+    if (state.mode === 'speedrun') {
+      state.speedrunScore++;
+      state.speedrunTotal++;
+    }
+
+    document.getElementById('g-score').textContent = state.score;
+    document.getElementById('g-streak').textContent = state.streak;
+    updateComboDisplay();
+
+    const msg = STREAK_MSGS[state.streak] || pick(CORRECT_MSGS);
+    document.getElementById('feedback').textContent = msg;
+
+    if (state.streak === 3 || state.streak === 7) playLevelUp();
+    else if (getMultiplier() > 1) playCombo();
+    else playCorrect();
+
+    if (state.streak >= 3) showToast(`🔥 ${state.streak} in a row! +${points} pts · +${earnedStars} stars`);
+
+    // show number insight for the answer
+    showInsights(state.correctAns);
+
+  } else {
+    if (el) el.classList.add('wrong');
+    if (typeInp) typeInp.classList.add('wrong');
+    document.getElementById('q-card').classList.add('wrong-flash');
+    state.streak = 0;
+    document.getElementById('g-streak').textContent = 0;
+    updateComboDisplay();
+    if (state.mode === 'speedrun') state.speedrunTotal++;
+
+    // highlight correct in classic mode
+    document.querySelectorAll('.ans-btn').forEach(b => {
+      if (answersMatch(b.textContent, state.correctAns)) b.classList.add('correct');
+    });
+
+    document.getElementById('feedback').textContent = `The answer was ${formatAnswer(state.correctAns)} — keep going! 💪`;
+    playWrong();
+
+    // show solution breakdown
+    const sol = buildSolution(currentQ);
+    if (sol) {
+      const solWrap = document.getElementById('solution-area');
+      solWrap.innerHTML = `<div class="solution-wrap"><div class="sol-title">💡 Here's how to think about it</div><div class="sol-steps">${sol.replace(/\n/g,'<br>')}</div></div>`;
+    }
+
+    // show insights on wrong too
+    showInsights(state.correctAns);
+  }
+
+  if (state.mode === 'speedrun') {
+    // auto advance in speedrun
+    setTimeout(loadQuestion, isCorrect ? 700 : 1400);
+  } else {
+    document.getElementById('next-btn').disabled = false;
+    if (state.qIndex + 1 >= state.totalQ) document.getElementById('next-btn').textContent = 'See results! 🎉';
+  }
+}
+
+function startTimer() {
+  const lv = LEVELS[state.level];
+  state.timeLeft = lv.timerSecs;
+  const timerEl = document.getElementById('g-timer');
+  const timerCard = document.getElementById('timer-card');
+  timerEl.textContent = state.timeLeft;
+  timerCard.classList.remove('warn');
+  document.getElementById('timer-ring-wrap').classList.add('visible');
+  updateTimerRing(state.timeLeft, lv.timerSecs);
+  state.timerInterval = setInterval(() => {
+    state.timeLeft--;
+    timerEl.textContent = state.timeLeft;
+    updateTimerRing(state.timeLeft, lv.timerSecs);
+    if (state.timeLeft <= 5) { timerCard.classList.add('warn'); playTick(); }
+    if (state.timeLeft <= 0) { clearInterval(state.timerInterval); if (!state.answered) timeUp(); }
+  }, 1000);
+}
+
+function updateTimerRing(timeLeft, total) {
+  const arc = document.getElementById('timer-ring-arc');
+  const txt = document.getElementById('timer-ring-text');
+  if (!arc || !txt) return;
+  const circumference = 188.5;
+  const offset = circumference - (timeLeft / total) * circumference;
+  arc.style.strokeDashoffset = offset;
+  const isWarn = timeLeft <= 5;
+  arc.style.stroke = isWarn ? 'var(--red)' : 'var(--green)';
+  txt.textContent = timeLeft;
+  txt.setAttribute('fill', isWarn ? 'var(--red)' : 'var(--text)');
+}
+
+function timeUp() {
+  state.answered = true;
+  state.streak = 0;
+  document.getElementById('g-streak').textContent = 0;
+  updateComboDisplay();
+  document.querySelectorAll('.ans-btn').forEach(b => {
+    b.disabled = true;
+    if (answersMatch(b.textContent, state.correctAns)) b.classList.add('correct');
+  });
+  const typeInp = document.getElementById('type-inp');
+  if (typeInp) typeInp.disabled = true;
+  document.getElementById('feedback').textContent = `⏰ Time's up! Answer: ${formatAnswer(state.correctAns)}`;
+  document.getElementById('q-card').classList.add('wrong-flash');
+  playWrong();
+  document.getElementById('next-btn').disabled = false;
+  if (state.qIndex + 1 >= state.totalQ) document.getElementById('next-btn').textContent = 'See results! 🎉';
+}
+
+document.getElementById('next-btn').addEventListener('click', () => {
+  if (state.mode === 'speedrun' && !state.speedrunActive) return;
+  state.qIndex++;
+  if (state.qIndex >= state.totalQ) { showResults(); return; }
+  loadQuestion();
+});
+
+function showResults() {
+  clearInterval(state.timerInterval);
+  clearInterval(state.speedrunInterval);
+  document.getElementById('game-play').style.display = 'none';
+  document.getElementById('game-results').style.display = 'block';
+
+  const total = state.mode === 'speedrun' ? state.speedrunTotal : state.totalQ;
+  const pct = total > 0 ? state.correct / total : 0;
+  let emoji, title;
+  if (pct === 1)       { emoji = '🏆'; title = 'Perfect score!'; }
+  else if (pct >= 0.9) { emoji = '🌟'; title = 'Outstanding!'; }
+  else if (pct >= 0.7) { emoji = '💪'; title = 'Great effort!'; }
+  else if (pct >= 0.5) { emoji = '👍'; title = 'Good start!'; }
+  else                  { emoji = '🔁'; title = 'Keep practising!'; }
+
+  const opLabel = OP_LABELS[state.op] || 'Mixed';
+  const modeLabel = { classic:'Classic', type:'Type-It', missing:'Missing Number', speedrun:'Speed Run' }[state.mode];
+  const ageLabel = state.ageGroup === 'senior' ? 'Ages 10-12' : 'Ages 6-9';
+  const meta = `${ageLabel} · ${modeLabel} · ${opLabel} · ${LEVELS[state.level].label}${state.timerOn ? ' · Timed' : ''}`;
+
+  document.getElementById('r-emoji').textContent = emoji;
+  document.getElementById('r-title').textContent = title;
+  document.getElementById('r-sub').textContent   = `${state.correct}/${total} correct · ${meta}`;
+  document.getElementById('r-correct').textContent     = state.correct;
+  document.getElementById('r-score2').textContent      = state.score;
+  document.getElementById('r-best-streak').textContent = state.bestStreak;
+  document.getElementById('r-reward').textContent = `⭐ ${state.rewardStars} reward stars collected`;
+
+  // Stars
+  const starsEl = document.getElementById('r-stars');
+  starsEl.innerHTML = '';
+  const starCount = pct === 1 ? 3 : pct >= 0.7 ? 2 : pct >= 0.4 ? 1 : 0;
+  for (let i = 0; i < 3; i++) {
+    const filled = i < starCount;
+    const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svg.setAttribute('viewBox','0 0 24 24'); svg.setAttribute('width','40'); svg.setAttribute('height','40');
+    svg.style.transition = `transform 0.3s ${i*0.12+0.2}s`; svg.style.transform = 'scale(0)';
+    const p = document.createElementNS('http://www.w3.org/2000/svg','polygon');
+    p.setAttribute('points','12,2 15,9 22,9.5 17,14 18.5,21 12,17.5 5.5,21 7,14 2,9.5 9,9');
+    p.setAttribute('fill', filled ? '#f59e0b' : 'none');
+    p.setAttribute('stroke', filled ? '#d97706' : '#d1d5db');
+    p.setAttribute('stroke-width','1.5');
+    svg.appendChild(p); starsEl.appendChild(svg);
+    setTimeout(() => svg.style.transform = 'scale(1)', 100);
+  }
+
+  // Per-op breakdown if mixed
+  const bkdn = document.getElementById('op-breakdown');
+  const bkdnRows = document.getElementById('op-breakdown-rows');
+  const activeOps = getActiveOps();
+  const hasOpStats = state.op === 'mixed' && activeOps.some(op => state.opStats[op] && state.opStats[op].t > 0);
+  bkdn.style.display = hasOpStats ? 'block' : 'none';
+  if (hasOpStats) {
+    const opColors = { add: 'var(--green)', sub: 'var(--blue)', mul: 'var(--amber)', div: 'var(--coral)', fractions:'var(--teal)', decimal:'var(--green)', geometry:'var(--rose)', bodmas:'var(--blue)', number:'var(--amber)', data:'var(--purple)' };
+    bkdnRows.innerHTML = '';
+    activeOps.forEach(op => {
+      const s = state.opStats[op];
+      if (!s.t) return;
+      const pct2 = Math.round((s.c / s.t) * 100);
+      const row = document.createElement('div');
+      row.className = 'op-row';
+      row.innerHTML = `
+        <div class="op-row-label">${OP_NAMES[op]}</div>
+        <div class="op-row-bar-wrap"><div class="op-row-bar" style="width:0%;background:${opColors[op]}" data-pct="${pct2}"></div></div>
+        <div class="op-row-pct">${pct2}%</div>
+      `;
+      bkdnRows.appendChild(row);
+    });
+    setTimeout(() => {
+      document.querySelectorAll('.op-row-bar').forEach(b => {
+        b.style.width = b.dataset.pct + '%';
+      });
+    }, 300);
+  }
+
+  state.pendingScore = state.score;
+  state.pendingMeta = meta;
+
+  // Missed questions review
+  const missedWrap = document.getElementById('missed-wrap');
+  const missedList = document.getElementById('missed-list');
+  if (state.missedQuestions.length > 0) {
+    missedWrap.style.display = 'block';
+    missedList.innerHTML = '';
+    state.missedQuestions.slice(0, 6).forEach(m => {
+      const item = document.createElement('div');
+      item.className = 'missed-item';
+      item.innerHTML = `<span class="missed-q">${escHtml(m.q)}</span><span class="missed-ans">✓ ${escHtml(m.ans)}</span>`;
+      missedList.appendChild(item);
+    });
+  } else {
+    missedWrap.style.display = 'none';
+  }
+
+  // Contextual suggestion
+  const ctxEl = document.getElementById('ctx-suggest');
+  const ctxMsg = document.getElementById('ctx-suggest-msg');
+  const ctxBtn = document.getElementById('ctx-suggest-btn');
+  if (state.op === 'mul' || state.currentOp === 'mul') {
+    ctxMsg.textContent = '🔢 Want to explore your times tables?';
+    ctxBtn.textContent = 'Times Tables →';
+    ctxBtn.onclick = () => { switchScreen('tables'); };
+    ctxEl.classList.add('show');
+  } else if (state.op === 'add' || state.op === 'sub') {
+    ctxMsg.textContent = '🔬 Curious about number properties?';
+    ctxBtn.textContent = 'Number Explorer →';
+    ctxBtn.onclick = () => { switchScreen('explorer'); };
+    ctxEl.classList.add('show');
+  } else {
+    ctxEl.classList.remove('show');
+  }
+
+  // Adaptive difficulty nudge after results
+  checkAdaptiveNudge(pct);
+
+  if (pct >= 0.7) launchConfetti();
+  updateNavHiscore();
+}
+
+document.getElementById('play-again-btn').addEventListener('click', resetGame);
+document.getElementById('save-score-btn').addEventListener('click', () => {
+  document.getElementById('modal-score-text').textContent = `You scored ${state.pendingScore} points — save it!`;
+  document.getElementById('modal-name-input').value = '';
+  document.getElementById('name-modal').classList.add('open');
+  document.getElementById('modal-name-input').focus();
+});
+document.getElementById('modal-save-btn').addEventListener('click', () => {
+  const name = document.getElementById('modal-name-input').value.trim() || 'Anonymous';
+  saveScore(name, state.pendingScore, state.pendingMeta);
+  document.getElementById('name-modal').classList.remove('open');
+  document.getElementById('save-score-btn').textContent = 'Saved! ✓';
+  document.getElementById('save-score-btn').disabled = true;
+});
+document.getElementById('modal-name-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('modal-save-btn').click();
+});
+
+document.getElementById('sound-toggle').addEventListener('click', () => {
+  state.soundOn = !state.soundOn;
+  updateSoundButton();
+  if (state.soundOn) {
+    showToast('Sound on');
+    playCorrect();
+  } else {
+    showToast('Sound off');
+  }
+});
+
+function resetGame() {
+  clearInterval(state.timerInterval);
+  clearInterval(state.speedrunInterval);
+  Object.assign(state, {
+    score:0, streak:0, bestStreak:0, correct:0, qIndex:0, answered:false,
+    speedrunScore:0, speedrunTotal:0, speedrunActive:false, speedrunTimeLeft:60,
+    rewardStars: 0,
+    opStats: makeFreshOpStats(),
+    seenQuestions: new Set(),
+    missedQuestions: []
+  });
+  document.getElementById('diff-nudge').classList.remove('show');
+  document.getElementById('ctx-suggest').classList.remove('show');
+  document.getElementById('timer-ring-wrap').classList.remove('visible');
+  document.getElementById('g-score').textContent = '0';
+  document.getElementById('g-streak').textContent = '0';
+  document.getElementById('g-mult').textContent = '×1';
+  document.getElementById('next-btn').textContent = 'Next →';
+  document.getElementById('next-btn').disabled = true;
+  document.getElementById('save-score-btn').textContent = 'Save score';
+  document.getElementById('save-score-btn').disabled = false;
+  document.getElementById('game-results').style.display = 'none';
+  document.getElementById('game-play').style.display = 'block';
+  document.getElementById('timer-card').classList.remove('warn');
+  document.getElementById('combo-badge').className = 'combo-badge';
+  document.getElementById('prog-fill').className = 'prog-fill';
+  document.getElementById('prog-fill').style.width = '0%';
+  document.getElementById('g-timer').textContent = '—';
+
+  if (state.mode === 'speedrun') {
+    state.totalQ = 999; // unlimited in speedrun
+    document.getElementById('g-qnum').textContent = '60s';
+    startSpeedRun();
+  } else {
+    state.totalQ = 10;
+  }
+
+  loadQuestion();
+}
+
+/* ── MODE PILLS ── */
+document.querySelectorAll('.mode-pill').forEach(pill => {
+  pill.addEventListener('click', () => {
+    document.querySelectorAll('.mode-pill').forEach(p => p.classList.remove('active'));
+    pill.classList.add('active');
+    state.mode = pill.dataset.mode;
+    resetGame();
+  });
+});
+
+/* ── AGE GROUP AND OP BUTTONS ── */
+const OP_BUTTONS = {
+  junior: [
+    ['add', '+ Add'],
+    ['sub', '− Sub'],
+    ['mul', '× Times'],
+    ['div', '÷ Divide'],
+    ['mixed', '⚡ Mix']
+  ],
+  senior: [
+    ['fractions', '½ Fractions'],
+    ['decimal', '% Decimals'],
+    ['geometry', '📐 Geometry'],
+    ['bodmas', '( ) Order'],
+    ['number', '# Patterns'],
+    ['data', '▦ Data'],
+    ['mixed', '⚡ Mix']
+  ]
+};
+
+function renderOpButtons() {
+  const wrap = document.querySelector('.op-selector');
+  wrap.innerHTML = '';
+  OP_BUTTONS[state.ageGroup].forEach(([op, label], index) => {
+    const btn = document.createElement('button');
+    btn.className = 'op-btn' + (state.op === op || (!OP_BUTTONS[state.ageGroup].some(([o]) => o === state.op) && index === 0) ? ' active' : '');
+    btn.dataset.op = op;
+    btn.textContent = label;
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.op-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      state.op = op;
+      resetGame();
+    });
+    wrap.appendChild(btn);
+    if (btn.classList.contains('active')) state.op = op;
+  });
+}
+
+document.querySelectorAll('.age-card').forEach(card => {
+  card.addEventListener('click', () => {
+    if (state.ageGroup === card.dataset.age) return;
+    // Show warning modal before switching
+    const targetAge = card.dataset.age;
+    const ageName = targetAge === 'senior' ? 'Ages 10–12' : 'Ages 6–9';
+    document.getElementById('age-switch-title').textContent = `Switch to ${ageName}?`;
+    document.getElementById('age-switch-msg').textContent = 'This will change your maths topics and start a new game.';
+    document.getElementById('age-switch-modal').classList.add('open');
+    document.getElementById('age-switch-ok-btn').onclick = () => {
+      document.getElementById('age-switch-modal').classList.remove('open');
+      document.querySelectorAll('.age-card').forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+      state.ageGroup = targetAge;
+      state.op = state.ageGroup === 'senior' ? 'fractions' : 'add';
+      renderOpButtons();
+      resetGame();
+      showToast(state.ageGroup === 'senior' ? 'Ages 10-12 mission unlocked!' : 'Ages 6-9 adventure ready!');
+    };
+    document.getElementById('age-switch-cancel-btn').onclick = () => {
+      document.getElementById('age-switch-modal').classList.remove('open');
+    };
+  });
+});
+
+/* ── LEVEL CHIPS ── */
+document.querySelectorAll('.opt-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.opt-chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    state.level = parseInt(chip.dataset.level);
+    resetGame();
+  });
+});
+
+/* ── TIMER TOGGLE ── */
+document.getElementById('timer-toggle').addEventListener('click', function() {
+  state.timerOn = !state.timerOn;
+  this.classList.toggle('on', state.timerOn);
+  resetGame();
+});
+
+/* ═══════════════════════════════════════════
+   TIMES TABLES — with prime & square highlights
+═══════════════════════════════════════════ */
+function renderTTNums() {
+  const wrap = document.getElementById('tt-num-btns');
+  wrap.innerHTML = '';
+  for (let i = 1; i <= 12; i++) {
+    const btn = document.createElement('button');
+    btn.className = 'tt-num-btn' + (i === ttSelectedNum ? ' active' : '');
+    btn.textContent = i;
+    btn.addEventListener('click', () => {
+      ttSelectedNum = i;
+      ttSeenQuestions.clear();
+      document.querySelectorAll('.tt-num-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderTTGrid();
+      newTTQuiz();
+    });
+    wrap.appendChild(btn);
+  }
+}
+
+function renderTTGrid() {
+  const n = ttSelectedNum;
+  const grid = document.getElementById('tt-grid');
+  grid.style.gridTemplateColumns = `36px repeat(12, 1fr)`;
+  grid.innerHTML = '';
+
+  const corner = document.createElement('div');
+  corner.className = 'tt-cell corner'; corner.textContent = '×';
+  grid.appendChild(corner);
+
+  for (let c = 1; c <= 12; c++) {
+    const h = document.createElement('div');
+    h.className = 'tt-cell header-row'; h.textContent = c;
+    grid.appendChild(h);
+  }
+
+  for (let r = 1; r <= 12; r++) {
+    const rowHead = document.createElement('div');
+    rowHead.className = 'tt-cell header-col'; rowHead.textContent = r;
+    grid.appendChild(rowHead);
+    for (let c = 1; c <= 12; c++) {
+      const cell = document.createElement('div');
+      const val = r * c;
+      let cls = 'tt-cell';
+      if (r === n || c === n) cls += ' highlight';
+      if (isPrime(val)) cls += ' prime-cell';
+      if (isPerfectSquare(val) && val > 1) cls += ' square-cell';
+      cell.className = cls;
+      cell.textContent = val;
+      cell.title = `${r} × ${c} = ${val}${isPrime(val) ? ' (prime)' : ''}${isPerfectSquare(val) && val > 1 ? ` (${Math.round(Math.sqrt(val))}²)` : ''}`;
+      cell.addEventListener('click', () => {
+        document.getElementById('tt-q').textContent = `${r} × ${c} = ?`;
+        ttCorrectAns = val;
+        document.getElementById('tt-input').value = '';
+        document.getElementById('tt-feedback').textContent = '';
+        document.getElementById('tt-input').focus();
+      });
+      grid.appendChild(cell);
+    }
+  }
+}
+
+function newTTQuiz() {
+  const a = ttSelectedNum;
+  let b, attempts = 0;
+  do {
+    b = rand(1, 12);
+    attempts++;
+  } while (attempts < 8 && ttSeenQuestions.has(`${a}x${b}`));
+  if (ttSeenQuestions.size >= 12) ttSeenQuestions.clear();
+  ttSeenQuestions.add(`${a}x${b}`);
+  ttCorrectAns = a * b;
+  document.getElementById('tt-q').textContent = `${a} × ${b} = ?`;
+  document.getElementById('tt-input').value = '';
+  document.getElementById('tt-feedback').textContent = '';
+  renderTTStreakBar();
+}
+
+function renderTTStreakBar() {
+  const bar = document.getElementById('tt-streak-bar');
+  bar.innerHTML = '';
+  for (let i = 0; i < 10; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'tt-streak-dot' + (i < ttStreak ? ' lit' : '');
+    bar.appendChild(dot);
+  }
+}
+
+document.getElementById('tt-submit-btn').addEventListener('click', checkTTAnswer);
+document.getElementById('tt-input').addEventListener('keydown', e => { if (e.key === 'Enter') checkTTAnswer(); });
+
+function checkTTAnswer() {
+  const val = parseInt(document.getElementById('tt-input').value, 10);
+  const fb = document.getElementById('tt-feedback');
+  if (isNaN(val)) { fb.style.color = 'var(--muted)'; fb.textContent = 'Type a number first!'; return; }
+  if (val === ttCorrectAns) {
+    ttStreak = Math.min(ttStreak + 1, 10);
+    fb.style.color = 'var(--green-d)';
+    fb.textContent = `Correct! 🌟${ttStreak >= 5 ? ' 🔥 ' + ttStreak + ' streak!' : ''}`;
+    playCorrect();
+    renderTTStreakBar();
+    setTimeout(newTTQuiz, 1100);
+  } else {
+    ttStreak = 0;
+    fb.style.color = 'var(--red-d)';
+    fb.textContent = `Not quite — the answer is ${ttCorrectAns}`;
+    playWrong();
+    renderTTStreakBar();
+  }
+}
+
+/* ═══════════════════════════════════════════
+   NUMBER EXPLORER
+═══════════════════════════════════════════ */
+function getFactors(n) {
+  const factors = [];
+  for (let i = 1; i <= n; i++) if (n % i === 0) factors.push(i);
+  return factors;
+}
+
+function getPrimeFactors(n) {
+  const factors = [];
+  let d = 2;
+  while (d * d <= n) {
+    while (n % d === 0) { factors.push(d); n = Math.floor(n / d); }
+    d++;
+  }
+  if (n > 1) factors.push(n);
+  return factors;
+}
+
+function exploreFacts(n) {
+  if (isNaN(n) || n < 1 || n > 99999) return null;
+  const facts = getFactors(n);
+  const primeFacts = getPrimeFactors(n);
+  const isPerf = facts.slice(0,-1).reduce((a,b)=>a+b,0) === n && n > 1;
+
+  return {
+    value: n,
+    isEven: n % 2 === 0,
+    isPrime: isPrime(n),
+    isPerfectSquare: isPerfectSquare(n),
+    isFib: isFib(n),
+    isPerfectNumber: isPerf,
+    factors: facts,
+    primeFactorisation: primeFacts.join(' × ') || String(n),
+    numFactors: facts.length,
+    sumFactors: facts.slice(0,-1).reduce((a,b)=>a+b,0),
+    sqrtApprox: Math.sqrt(n).toFixed(4),
+    next10Multiples: Array.from({length:5},(_,i)=>n*(i+1)).join(', ')
+  };
+}
+
+document.getElementById('explorer-go').addEventListener('click', runExplorer);
+document.getElementById('explorer-input').addEventListener('keydown', e => { if (e.key === 'Enter') runExplorer(); });
+
+function runExplorer() {
+  const val = parseInt(document.getElementById('explorer-input').value, 10);
+  const factsEl = document.getElementById('explorer-facts');
+  if (isNaN(val) || val < 1) {
+    factsEl.innerHTML = '<div class="explorer-placeholder">Please enter a positive number ✨</div>';
+    return;
+  }
+  const f = exploreFacts(val);
+  if (!f) {
+    factsEl.innerHTML = '<div class="explorer-placeholder">Enter a number between 1 and 99,999</div>';
+    return;
+  }
+
+  const badges = [];
+  if (f.isPrime)         badges.push('<span class="insight-tag prime">🔴 Prime</span>');
+  if (f.isPerfectSquare) badges.push(`<span class="insight-tag square">⬛ Perfect Square (√${f.value} = ${Math.round(Math.sqrt(f.value))})</span>`);
+  if (f.isFib)           badges.push('<span class="insight-tag fib">🌀 Fibonacci</span>');
+  if (f.isPerfectNumber) badges.push('<span class="insight-tag perfect">💎 Perfect Number</span>');
+  badges.push(f.isEven
+    ? '<span class="insight-tag even">✌ Even</span>'
+    : '<span class="insight-tag odd">☝ Odd</span>');
+
+  factsEl.innerHTML = `
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">${badges.join('')}</div>
+    <div class="explorer-facts">
+      <div class="explorer-fact">
+        <div class="ef-label">Prime factorisation</div>
+        <div class="ef-val">${f.primeFactorisation}</div>
+      </div>
+      <div class="explorer-fact">
+        <div class="ef-label">Number of factors</div>
+        <div class="ef-val">${f.numFactors}</div>
+      </div>
+      <div class="explorer-fact">
+        <div class="ef-label">Sum of proper factors</div>
+        <div class="ef-val">${f.sumFactors}${f.isPerfectNumber ? ' = ' + f.value + ' ✨' : ''}</div>
+      </div>
+      <div class="explorer-fact">
+        <div class="ef-label">Square root (√)</div>
+        <div class="ef-val">${f.sqrtApprox}</div>
+      </div>
+      <div class="explorer-fact full-width">
+        <div class="ef-label">All factors</div>
+        <div class="ef-val">${f.factors.join(', ')}</div>
+      </div>
+      <div class="explorer-fact full-width">
+        <div class="ef-label">First 5 multiples</div>
+        <div class="ef-val">${f.next10Multiples}</div>
+      </div>
+    </div>
+  `;
+}
+
+/* ═══════════════════════════════════════════
+   LEADERBOARD
+═══════════════════════════════════════════ */
+function renderLeaderboard() {
+  const scores = getScores();
+  const list = document.getElementById('lb-list');
+  list.innerHTML = '';
+  if (!scores.length) {
+    list.innerHTML = '<div class="lb-empty">No scores yet — play a game first!</div>';
+    return;
+  }
+  const rankClass = ['gold','silver','bronze'];
+  const rankLabel = ['🥇','🥈','🥉'];
+  scores.forEach((s, i) => {
+    const row = document.createElement('div');
+    row.className = 'lb-row';
+    row.innerHTML = `
+      <div class="lb-rank ${rankClass[i]||''}">${rankLabel[i]||`${i+1}`}</div>
+      <div class="lb-info">
+        <div class="lb-name">${escHtml(s.name)}</div>
+        <div class="lb-meta">${escHtml(s.meta||'')} · ${s.date}</div>
+      </div>
+      <div class="lb-score-badge">${s.score}</div>
+    `;
+    list.appendChild(row);
+  });
+}
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+document.getElementById('lb-clear-btn').addEventListener('click', () => {
+  document.getElementById('confirm-modal').classList.add('open');
+});
+document.getElementById('confirm-cancel-btn').addEventListener('click', () => {
+  document.getElementById('confirm-modal').classList.remove('open');
+});
+document.getElementById('confirm-ok-btn').addEventListener('click', () => {
+  document.getElementById('confirm-modal').classList.remove('open');
+  try { localStorage.removeItem('mathAdventureScoresV2'); } catch(e) {}
+  renderLeaderboard();
+  updateNavHiscore();
+});
+
+/* ═══════════════════════════════════════════
+   CONFETTI
+═══════════════════════════════════════════ */
+function launchConfetti() {
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const pieces = [];
+  const colors = ['#10b981','#3b82f6','#f59e0b','#ef4444','#8b5cf6','#f97316','#06b6d4','#f43f5e'];
+  for (let i = 0; i < 140; i++) {
+    pieces.push({
+      x: Math.random() * canvas.width,
+      y: -20,
+      r: Math.random() * 8 + 3,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      vx: (Math.random() - 0.5) * 7,
+      vy: Math.random() * 5 + 2,
+      angle: Math.random() * Math.PI * 2,
+      spin: (Math.random() - 0.5) * 0.25,
+      shape: Math.random() < 0.3 ? 'circle' : 'rect'
+    });
+  }
+  let frame = 0;
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    pieces.forEach(p => {
+      p.x += p.vx; p.y += p.vy; p.angle += p.spin; p.vy += 0.12;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.angle);
+      ctx.fillStyle = p.color;
+      if (p.shape === 'circle') ctx.beginPath(), ctx.arc(0,0,p.r/2,0,Math.PI*2), ctx.fill();
+      else ctx.fillRect(-p.r/2, -p.r/2, p.r, p.r*0.6);
+      ctx.restore();
+    });
+    frame++;
+    if (frame < 200) requestAnimationFrame(draw);
+    else ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+  draw();
+}
+
+/* ═══════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════ */
+/* ═══════════════════════════════════════════
+   SESSION PROGRESS
+═══════════════════════════════════════════ */
+function updateSessionProgress() {
+  document.getElementById('sp-total').textContent = state.sessionTotal;
+  document.getElementById('sp-correct').textContent = state.sessionCorrect;
+  const acc = state.sessionTotal > 0 ? Math.round((state.sessionCorrect / state.sessionTotal) * 100) : 0;
+  document.getElementById('sp-acc').textContent = state.sessionTotal > 0 ? acc + '%' : '—';
+  document.getElementById('sp-acc-bar').style.width = state.sessionTotal > 0 ? acc + '%' : '0%';
+  const bar = document.getElementById('sp-acc-bar');
+  bar.style.background = acc >= 80 ? 'var(--green)' : acc >= 60 ? 'var(--amber)' : 'var(--red)';
+}
+
+/* ═══════════════════════════════════════════
+   ADAPTIVE DIFFICULTY NUDGE
+═══════════════════════════════════════════ */
+function checkAdaptiveNudge(pct) {
+  const nudge = document.getElementById('diff-nudge');
+  const msg = document.getElementById('diff-nudge-msg');
+  const btn = document.getElementById('diff-nudge-btn');
+  if (pct === 1 && state.level < 3) {
+    msg.textContent = `🌟 Perfect score! Ready for ${LEVELS[state.level + 1].label}?`;
+    btn.textContent = 'Level up →';
+    btn.onclick = () => {
+      state.level++;
+      document.querySelectorAll('.opt-chip').forEach(c => {
+        c.classList.toggle('active', parseInt(c.dataset.level) === state.level);
+      });
+      nudge.classList.remove('show');
+      resetGame();
+    };
+    nudge.classList.add('show');
+  } else if (pct < 0.4 && state.level > 0) {
+    msg.textContent = `💡 No worries — try ${LEVELS[state.level - 1].label} to build confidence!`;
+    btn.textContent = 'Step down →';
+    btn.onclick = () => {
+      state.level--;
+      document.querySelectorAll('.opt-chip').forEach(c => {
+        c.classList.toggle('active', parseInt(c.dataset.level) === state.level);
+      });
+      nudge.classList.remove('show');
+      resetGame();
+    };
+    nudge.classList.add('show');
+  } else {
+    nudge.classList.remove('show');
+  }
+}
+
+/* ═══════════════════════════════════════════
+   SCREEN SWITCHING HELPER
+═══════════════════════════════════════════ */
+function switchScreen(screenName) {
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.toggle('active', t.dataset.screen === screenName));
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + screenName).classList.add('active');
+  if (screenName === 'leaderboard') renderLeaderboard();
+  if (screenName === 'tables') renderTTGrid();
+}
+
+/* ═══════════════════════════════════════════
+   PRIVACY & MODALS
+═══════════════════════════════════════════ */
+function openPrivacy() { document.getElementById('privacy-modal').classList.add('open'); }
+document.getElementById('privacy-close-btn').addEventListener('click', () => {
+  document.getElementById('privacy-modal').classList.remove('open');
+});
+document.getElementById('onboard-privacy-link').addEventListener('click', openPrivacy);
+document.getElementById('footer-privacy-link').addEventListener('click', openPrivacy);
+
+/* ═══════════════════════════════════════════
+   ONBOARDING
+═══════════════════════════════════════════ */
+document.querySelectorAll('.onboard-age-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    state.ageGroup = btn.dataset.age;
+    state.op = state.ageGroup === 'senior' ? 'fractions' : 'add';
+    // Sync age-card UI
+    document.querySelectorAll('.age-card').forEach(c => {
+      c.classList.toggle('active', c.dataset.age === state.ageGroup);
+    });
+    renderOpButtons();
+    // Switch screens: hide onboarding, show game
+    document.getElementById('screen-onboarding').classList.remove('active');
+    document.getElementById('screen-game').classList.add('active');
+    document.querySelector('.nav-tab[data-screen="game"]').classList.add('active');
+    resetGame();
+    showToast(state.ageGroup === 'senior' ? 'Ages 10-12 — let\'s go! 🚀' : 'Ages 6-9 — adventure starts! 🌱');
+  });
+});
+
+function init() {
+  updateSoundButton();
+  renderOpButtons();
+  renderTTNums();
+  renderTTGrid();
+  newTTQuiz();
+  updateNavHiscore();
+  updateSessionProgress();
+  // Don't call loadQuestion here — wait for onboarding to complete
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+</script>
+</body>
+</html>
